@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintWords", "PrintWords\PrintWords.csproj", "{DB931F7B-469B-4193-A647-DDDEAA3B2BCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB931F7B-469B-4193-A647-DDDEAA3B2BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB931F7B-469B-4193-A647-DDDEAA3B2BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB931F7B-469B-4193-A647-DDDEAA3B2BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB931F7B-469B-4193-A647-DDDEAA3B2BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {736E8586-1DDD-486A-B1C7-4D6C8C1CEA7C}
+	EndGlobalSection
+EndGlobal

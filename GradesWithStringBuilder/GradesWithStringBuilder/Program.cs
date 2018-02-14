@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-
-namespace Gradebook
+namespace GradesWithStringBuilder
 {
-    public class Program
+    class Program
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
+
             List<string> students = new List<string>();
             List<double> grades = new List<double>();
             string newStudent;
@@ -32,16 +33,16 @@ namespace Gradebook
                 grades.Add(newGrade);
             }
 
-            //Print class roster - not using StringBuilder Class
+            /*Print class roster - not using StringBuilder Class
 
             Console.WriteLine("\nClass roster:");
             for (int i = 0; i < students.Count; i++)
             {
                 Console.WriteLine(students[i] + " (" + grades[i] + ")");
             }
-            
+            */
 
-            /* Print class roster -  using StringBuilder Class
+            //Print class roster -  using StringBuilder Class
             Console.WriteLine("\nClass roster:");
 
             StringBuilder studentInfo = new StringBuilder();
@@ -53,11 +54,11 @@ namespace Gradebook
                 studentInfo.Append(grades[i]);
                 studentInfo.Append("\n");
 
-                Console.WriteLine(studentInfo);
-                Console.ReadLine();
-            }
-            */
 
+
+            }
+
+            Console.WriteLine(studentInfo);
 
 
             double sum = grades.Sum();
