@@ -12,7 +12,7 @@ namespace CheeseMVC.Controllers
     {
 
 
-        static private List<string> Cheeses = new List<string>();
+        static private Dictionary<string, string> Cheeses = new Dictionary<string, string>();
        
         // GET: /<controller>/
         public IActionResult Index()
@@ -34,11 +34,11 @@ namespace CheeseMVC.Controllers
         }
         [HttpPost]
         [Route("/Cheese/Add")]
-        public IActionResult NewCheese(string name)
+        public IActionResult NewCheese(string name, string descript)
         {
             // Add the new cheese to my existing cheeses
 
-            Cheeses.Add(name);
+            Cheeses.Add(name,descript);
 
             return Redirect("/Cheese");
 
