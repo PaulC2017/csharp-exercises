@@ -21,7 +21,6 @@ namespace CheeseMVC.Controllers
             
         {
            
-
             ViewBag.cheeses = Cheeses;
             
             return View();
@@ -43,11 +42,7 @@ namespace CheeseMVC.Controllers
             Cheeses.Add(name,descript);
            
             return Redirect("/Cheese");
-
-
-
-
-
+           
         }
 
        
@@ -75,57 +70,21 @@ namespace CheeseMVC.Controllers
                 return View("Delete");
             
         }
+
         [HttpPost]
         [Route("/Cheese/Delete")]
         public IActionResult Delete(string[] cheese)
         {
-            Dictionary<string, string> Tempy = new Dictionary<string, string>();  // a place holder for the modifcations to
-                                                                                  // our Cheeeses dictionary
             
-            int i = 0;
-            string check = "";
-            foreach(KeyValuePair<string,string> item in Cheeses)
-            {
-                check = cheese[i];
-
-                if (check != "on")
-                {
-                    Tempy.Add(item.Key, item.Value);
-                    return Content("We got != on");
-                }
-
-                ++i;
-                if (i >= cheese.Length)
-                {
-                    break;
-                }
-            }
-            return Content("We did not get an !=");
-               
-
-            /* for (int i=0; i<cheese.Length; ++i)
+            for (int i=0; i<=cheese.Length-1; ++i)
              {
-
-              if (cheese[i] == "on")
-                 {
-                     Console.WriteLine("we do have an on value - the issue is with the remove");
-
-
-
+                Cheeses.Remove(cheese[i]);
+              
                  }
+            
+            return Redirect("/Cheese");
 
-
-
-             }  */
-           // Cheeses = Tempy;
-            //Tempy.Clear();
-            //return Redirect("/Cheese");
-           
         }
-
-
-
-
-
+        
     }
 }
