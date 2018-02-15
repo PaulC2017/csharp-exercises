@@ -1,0 +1,39 @@
+﻿}
+
+<h1>My Cheeses</h1>
+
+@if (ViewBag.list.Length == 0)
+{
+
+    <p>No Cheeses Yet!</p>
+
+}
+
+
+
+
+
+    <form method="Post" action="/Cheese/Delete" >
+
+
+        @for (int i = 0; i < ViewBag.list.Length; ++i)
+    {
+
+
+        <input input="string[] cheese" name ="cheese" type="checkbox" />
+        <label for="cheese">@ViewBag.list[i]</label>
+
+        <br />
+
+
+}
+        @if (ViewBag.list.Length > 0)
+    {
+        <input type="submit" value="Delete" />
+
+}
+
+
+
+
+    </form>
