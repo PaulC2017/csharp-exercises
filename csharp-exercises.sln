@@ -26,9 +26,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StringTermSearch", "StringT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Area", "Area\Area.csproj", "{603E7A32-3030-4BFA-86BE-BB0ED21F1DB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradebookExample", "GradebookExample\GradebookExample.csproj", "{645DDA3F-CB52-4FD7-8135-9B53F4A00B89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradebookExample", "GradebookExample\GradebookExample.csproj", "{645DDA3F-CB52-4FD7-8135-9B53F4A00B89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingWithStrings", "WorkingWithStrings\WorkingWithStrings.csproj", "{3D8FD8D6-A526-4F32-8A13-4F3E684AA0A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkingWithStrings", "WorkingWithStrings\WorkingWithStrings.csproj", "{3D8FD8D6-A526-4F32-8A13-4F3E684AA0A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "School", "School\School.csproj", "{D11BC15E-6E84-4142-888F-649B392A8025}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +94,10 @@ Global
 		{3D8FD8D6-A526-4F32-8A13-4F3E684AA0A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D8FD8D6-A526-4F32-8A13-4F3E684AA0A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D8FD8D6-A526-4F32-8A13-4F3E684AA0A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D11BC15E-6E84-4142-888F-649B392A8025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D11BC15E-6E84-4142-888F-649B392A8025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D11BC15E-6E84-4142-888F-649B392A8025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D11BC15E-6E84-4142-888F-649B392A8025}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
