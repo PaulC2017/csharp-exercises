@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace Student
 {
     public class Program
@@ -11,18 +12,17 @@ namespace Student
 
             Student paul = new Student("Paul");
             Student sally = new Student("Sally");
-            paul.AddGrade(4, 4.0);
-            paul.AddGrade(3, 3.0);
+            paul.AddGrade(3, 4.0);
+            paul.AddGrade(4, 3.0);
             sally.AddGrade(3, 3.0);
             sally.AddGrade(3, 3.5);
 
 
-            int paulNumberOfCourses = paul.NumberOfCourses;
             int paulNumberOfCredits = paul.NumberOfCredits;
             string paulGradeLevel = paul.GradeLevel;
             double paulGpa = paul.Gpa;
 
-            int sallyNumberOfCourses = sally.NumberOfCourses;
+           
             int sallyNumberOfCredits = sally.NumberOfCredits;
             string sallyGradeLevel = sally.GradeLevel;
             double sallyGpa = sally.Gpa;
@@ -35,16 +35,21 @@ namespace Student
             Console.WriteLine("Paul Number of Credits = " + paul.NumberOfCredits.ToString());
 
             Console.WriteLine("Paul's info: ");
-            Console.WriteLine("Gpa = " + paul.Gpa.ToString());
+            Console.WriteLine("Gpa = " +   Math.Round(paul.Gpa,2,MidpointRounding.AwayFromZero).ToString());
             Console.WriteLine("Grade Level = " + paulGradeLevel);
             Console.WriteLine("Sally's info: ");
-            Console.WriteLine("Gpa = " + sally.Gpa.ToString());
+            Console.WriteLine("Gpa = " + Math.Round(sally.Gpa,2, MidpointRounding.AwayFromZero).ToString());
             
             Console.WriteLine("Grade Level = " + sallyGradeLevel);
+
+            // use custom ToString() method written below
+
+            Console.WriteLine(paul.ToString());
+            Console.WriteLine(sally.ToString());
             Console.ReadLine();
         }
 
-
+    
 
         public class Student
         {
@@ -54,9 +59,10 @@ namespace Student
             public int StudentId { get; set; }
             public int NumberOfCredits { get; set; }
             public double Gpa { get; set; }
-            public int NumberOfCourses { get; set; }
-            public double SumOfGrades;
+            
+            
             public string GradeLevel { get; set; }
+            public double TotalQualityScore { get; set; }
 
             public Student(string name, int studentId,
                            int numberOfCredits, double gpa)
@@ -65,9 +71,9 @@ namespace Student
                 StudentId = studentId;
                 NumberOfCredits = numberOfCredits;
                 Gpa = gpa;
-                NumberOfCourses = 0;
-                SumOfGrades = 0;
+                
                 GradeLevel = "Freshman";
+                TotalQualityScore = 0;
 
             }
 
@@ -84,10 +90,11 @@ namespace Student
             {
                 // Update the appropriate properties: NumberOfCredits, Gpa
 
+                double qualityScore = (courseCredits * grade);
                 NumberOfCredits = NumberOfCredits + courseCredits;
-                NumberOfCourses++;
-                SumOfGrades = SumOfGrades + grade;
-                Gpa = SumOfGrades / NumberOfCourses;
+                TotalQualityScore = TotalQualityScore + qualityScore;
+
+                Gpa = TotalQualityScore / NumberOfCredits;
 
             }
 
@@ -132,7 +139,16 @@ namespace Student
 
 
             }
+
+            public override string ToString()
+            {
+                return Name + "(Credits: " + NumberOfCredits + ", GPA: " + Gpa + ")";
+
+
         }
 
+
+        }
+       
     }
 }
