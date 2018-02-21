@@ -7,22 +7,31 @@ namespace CheeseMVC.Models
 {
     public class Cheese
     {
+        
+        // the fields
 
-     private string name { get; set; }
-     private string description { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-     public Cheese(string name, string description)
+
+        // the constructor 
+       
+            public Cheese (string name, string description)
         {
-            this.name = name;
-            this.description = description;
+            Name = name;
+            Description = description;
         }
 
+        // method to add a cheese to the dictionary MyCheeses
 
+       
 
-
-
+       
     }
+
+
+}
 
    
 
-}
+
