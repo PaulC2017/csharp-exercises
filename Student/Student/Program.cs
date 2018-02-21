@@ -46,6 +46,14 @@ namespace Student
 
             Console.WriteLine(paul.ToString());
             Console.WriteLine(sally.ToString());
+           
+
+            //use custom Equals and GetHashCode() methods written below
+            
+            Console.WriteLine("paul == sally, using customn Equals() is : " + paul.Equals(sally).ToString());
+            Console.WriteLine("GetHasCode() for paul is: " + paul.GetHashCode());
+            Console.WriteLine("GetHasCode() for sally is: " + sally.GetHashCode());
+
             Console.ReadLine();
         }
 
@@ -142,11 +150,37 @@ namespace Student
 
             public override string ToString()
             {
-                return Name + "(Credits: " + NumberOfCredits + ", GPA: " + Gpa + ")";
+                return Name + "(Credits: " + NumberOfCredits + ", GPA: " + Math.Round(Gpa,2,MidpointRounding.AwayFromZero) + ")";
 
+               
+            }
 
-        }
+            public override bool Equals(Object o)
+            {
+                if (o == this)
+                {
+                    return true;
+                }
 
+                if (o == null)
+                {
+                    return false;
+                }
+
+                if (o.GetType() != GetType())
+                {
+                    return false;
+                }
+
+                Student studentObj = o as Student;
+                return StudentId == studentObj.StudentId;
+
+            }
+
+            public override int GetHashCode()
+            {
+                return StudentId;
+            }
 
         }
        
