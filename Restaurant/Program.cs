@@ -15,20 +15,24 @@ namespace Restaurant
             MenuItem cheeseCake = new MenuItem("Cheese Cake", "Straight from NY - delicious", "Dessert");
             MenuItem pieAlaMode = new MenuItem("Apple Pie a la Mode ", "Nice and hot - delicious", "Dessert"); */
 
-            
+            Console.WriteLine(DateTime.Today.ToShortDateString());
+            Console.WriteLine();
             Menu tastys = new Menu("Tasty's - Friday's Specials");
             
             tastys.AddMenuItem("Lasagna", "Our secret recipe - delicious", "Main Course");
             tastys.AddMenuItem("Filet Mignon", "Our aged beef - delicious", "Main Course");
+            tastys.AddMenuItem("Cheese Cake", "Straight from NY - delicious", "Dessert");
             tastys.ShowMenu();
 
             
             Console.ReadLine();
             tastys.RemoveMenuItem("Lasagna", 1);
             tastys.ShowMenu();
+            Console.ReadLine();
 
-
-
+            Console.WriteLine("Date int = " + (int.Parse(DateTime.Today.ToString("yyyyMMdd")).ToString()));
+            DateTime testDate =  Convert.ToDateTime("02/22/2018");
+            Console.WriteLine("test Date int = " + int.Parse(testDate.ToString("yyyyMMdd")).ToString());
             Console.ReadLine();
         }
 
@@ -38,27 +42,37 @@ namespace Restaurant
     {
         public List<MenuItem> menuItems;
         public string Name { get; set; }
+        //public DateTime DateMenuUpdated { get; private set; }
+        string DateMenuUpdated; 
+
+
+        //constructor
         public Menu (string name)
         {
 
             Name = name;
             menuItems = new List<MenuItem>();
-            
+            DateMenuUpdated = DateTime.Today.ToShortDateString();  // render just the ate 02/23/2018 and not the default time 12:00 am from DateTime
+
+
+
         }
-        
-    public void AddMenuItem(string name, string description, string category)
+
+        public void AddMenuItem(string name, string description, string category)
         {
 
             MenuItem newItem = new MenuItem(name, description, category);
             menuItems.Add(newItem);
+            DateMenuUpdated = DateTime.Today.ToShortDateString();
+
 
         }
-     public void RemoveMenuItem(string name, int menuItemId)
+        public void RemoveMenuItem(string name, int menuItemId)
         {
             MenuItem itemToRemove = null; ;
             foreach (MenuItem item in menuItems)
             {
-               
+                
                 if (item.Name == name  & item.GetHashCode() == menuItemId)
                 {
                     itemToRemove = item;
@@ -68,15 +82,30 @@ namespace Restaurant
             }
             menuItems.Remove(itemToRemove);
         }
-     
 
-    public void ShowMenu()
-    {
-            foreach(var item in menuItems)
+    
+        public void ShowMenu()
+        {
+
+            Console.WriteLine("Our Menu was Just Updated " + DateMenuUpdated);
+
+
+            foreach (MenuItem item in menuItems)
             {
+
+                Console.WriteLine("Date Added = " + item.DateAdded.ToString());
                 Console.WriteLine(item.Name + "  "  + item.Description + "  " + item.Category);
                 Console.WriteLine("item.NextMenuId" + "  " + item.NextMenuId);
+                // (int.Parse(DateTime.Today.ToString("yyyyMMdd")).ToString())
+                if (item.DateAdded - int.Parse(DateTime.Today.ToString("yyyyMMdd")) < 7)
+                {
+                    Console.WriteLine("New Item!!");
+                     
+                }
+                
+                
             }
+            
 
         }
     
@@ -93,6 +122,17 @@ namespace Restaurant
         public string Description { get; set; }
         public string Category { get; set; }
 
+        // declare fields with acsessor properties
+
+        private int dateAdded = int.Parse(DateTime.Today.ToString("yyyyMMdd"));      
+        public int DateAdded
+        {
+
+           get { return dateAdded; }
+           set { DateAdded = dateAdded; }
+               
+        }
+        
         // constructor
         public MenuItem(string name, string description, string category)
         {
@@ -101,42 +141,11 @@ namespace Restaurant
             Description = description;
             Category = category;
             NextMenuId = ++nextMenuId;
-
-
+            //DateAdded = dateAdded;  - toook thisout and the program worked without it!!!   set { DateAdded = dateAdded; } must be how DateAdded gets constructed
 
         }
-         
 
-        /* private DateTime dateAdded;
-         public DateTime DateAdded
-         {
-             get
-             {
-                 return dateAdded;
-             }
-             set
-             {
-                 dateAdded = DateTime.Today;
-             }
-         }
-         */
 
-         private bool newFlag;
-         public bool NewFlag
-         {
-             get
-             {
-                 return newFlag;
-             }
-             set
-             {
-                 if ((DateTime.Today - DateAdded).TotalDays < 7)
-                 {
-                     newFlag = true;
-                 }
-             }
-         }
-         
         public override bool Equals(object o)
 
         {
@@ -155,7 +164,20 @@ namespace Restaurant
             }
 
             MenuItem menuItemObj = o as MenuItem;
-            return NextMenuId == menuItemObj.NextMenuId;
+
+            if (Name == menuItemObj.Name)
+
+            {
+                if (Description == menuItemObj.Description)
+                {
+                    if (Category == menuItemObj.Category)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
 
 
 
