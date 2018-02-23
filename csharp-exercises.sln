@@ -30,7 +30,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradebookExample", "Gradebo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkingWithStrings", "WorkingWithStrings\WorkingWithStrings.csproj", "{3D8FD8D6-A526-4F32-8A13-4F3E684AA0A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "School", "School\School.csproj", "{D11BC15E-6E84-4142-888F-649B392A8025}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "School", "School\School.csproj", "{D11BC15E-6E84-4142-888F-649B392A8025}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant", "Restaurant\Restaurant.csproj", "{ACB39FD6-5296-437E-B2E0-082A789C90C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,10 @@ Global
 		{D11BC15E-6E84-4142-888F-649B392A8025}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D11BC15E-6E84-4142-888F-649B392A8025}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D11BC15E-6E84-4142-888F-649B392A8025}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB39FD6-5296-437E-B2E0-082A789C90C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB39FD6-5296-437E-B2E0-082A789C90C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB39FD6-5296-437E-B2E0-082A789C90C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB39FD6-5296-437E-B2E0-082A789C90C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
