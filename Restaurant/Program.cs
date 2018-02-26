@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Restaurant
 {
@@ -32,12 +33,29 @@ namespace Restaurant
             tastys.ShowMenu();
             Console.ReadLine();
 
-            //add another menu item called cheese cake and see if both show up in the menu 
+            //add another menu item called cheese cake and see if it gets rejected
             //search for menu tem Cheese Cake - it should be there twice
-            // and finally search fro an item tyhat isnot there - returns message saying menu item not found
+            // and finally search for an item tyhat is not there - returns message saying menu item not found
             tastys.AddMenuItem("Cheese Cake", "Straight from NY - delicious", "Dessert");
-            tastys.ShowMenuItem("Cheese Cake");
-            tastys.ShowMenuItem("Cheese ake");
+            tastys.AddMenuItem("Cheese Cake", "Straight - NY - delicious", "Dessert");
+            tastys.AddMenuItem("Cheese Cake", "Straight from NY - delicous", "Dessert");
+            tastys.GetMenuItem("Cheese Cake");
+            tastys.GetMenuItem("Cheese ake");
+
+            Console.ReadLine();
+            MenuItem compare1 = tastys.GetMenuItem("Filet Mignon");
+            MenuItem compare2 = tastys.GetMenuItem("Cheese Cake");
+            Console.WriteLine("We are here at the  compare section - hit return to execut4e teh compare commands test");
+            Console.ReadLine();
+            if (compare1.Equals(compare2))
+            {
+                Console.WriteLine(compare1.Name + " is the same as "+ compare2.Name);
+            }
+            else
+            {
+                Console.WriteLine(compare1.Name + " is not the same as " + compare2.Name);
+
+            }
             Console.ReadLine();
         }
     }
@@ -59,9 +77,20 @@ namespace Restaurant
 
         public void AddMenuItem(string name, string description, string category)
         {
+
+           
+
             MenuItem newItem = new MenuItem(name, description, category);
-            menuItems.Add(newItem);
-            DateMenuUpdated = DateTime.Today.ToShortDateString();
+            if (menuItems.IndexOf(newItem) == -1)
+            {
+                menuItems.Add(newItem);
+                DateMenuUpdated = DateTime.Today.ToShortDateString();
+            }
+            else
+            {
+                Console.WriteLine("This menu item, " + name + ", already exists in the Menu");
+            }
+            
         }
 
         public void RemoveMenuItem(string name, int menuItemId)
@@ -77,7 +106,64 @@ namespace Restaurant
             }
             menuItems.Remove(itemToRemove);
         }
-    
+
+        public MenuItem GetMenuItem(string item1)  
+        {
+            
+            /*
+            //find one  MenuItem where the name = item1 the method return type needs to be MenuItem
+
+             MenuItem result = (from a in menuItems where a.Name.ToString() == item1 select a).SingleOrDefault();
+
+            return result;
+            */
+            // or:
+
+            MenuItem matches = menuItems.Find(item => item.Name == item1);
+
+            return matches;
+            /*
+
+            
+            // find all MenuItems with the name  item1 and put the results in a list -  method return type needs to be List<MenuItem> or Ienumerable<MenuList> 
+                                                                                       //if you want to return the results vs just printing them
+
+            List<MenuItem>  matches = menuItems.FindAll(item => item.Name == item1);
+
+
+
+            //find all menu items that match the input item1 - method retyrn tyoe needs to be Ienumerable<MenuItem> if you want to return the results vs just printing them
+
+            var match = menuItems.Where(item => item.Name == item1);  
+            Console.WriteLine("the type of match is " + match.GetType().ToString());
+           
+            Console.WriteLine("here is what is in matches");
+
+            foreach (MenuItem item in matches) 
+            {
+                Console.WriteLine(item.Name + " " +  item.NextMenuId);
+            }
+            Console.WriteLine("here is what is in match");
+            Console.WriteLine();
+
+            foreach ( var item in match)
+            {
+                Console.WriteLine(item.Name + " " + item.NextMenuId);
+            }
+
+            var matchCount = match.Count();
+
+            if (matchCount == 0 || matches.Count == 0)
+            {
+                Console.WriteLine(item1 + " Menu Item Not Found");
+                Console.WriteLine();
+            }
+            return matches; 
+           */
+
+
+        }
+        
         public void ShowMenu()
         {
             Console.WriteLine("Our Menu Was Updated as of " + DateMenuUpdated);
@@ -95,7 +181,9 @@ namespace Restaurant
             }
         }
 
-        public void ShowMenuItem(string name)
+       /* // This does not use the FindAll() or .Where methods - it it4erates thru the entire list looking for matches
+        * 
+        * public void ShowMenuItem(string name)
         {
             bool itemFound = false;
             foreach (MenuItem item in menuItems)
@@ -112,6 +200,12 @@ namespace Restaurant
                 Console.WriteLine(name + " Menu Item Not Found");
             }
         }
+        */
+        public bool CompareMenuIems(string item1, string items)
+        {
+            return true;
+        }
+
     }
 
     public class MenuItem
@@ -148,7 +242,7 @@ namespace Restaurant
 
         }
 
-        public override bool Equals(object o)
+        public override bool Equals( object o)
         {
             if (o == this)
             {
