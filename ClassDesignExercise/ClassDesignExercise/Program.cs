@@ -72,13 +72,15 @@ namespace ClassDesignExercise
         }
     }
 
-
-
-    class  Shape
+    
+     public abstract class Shape  
     {
         private static int shapeId = 0;
-        public int ShapeId { get; set; }
-
+        public int ShapeId
+        {
+            get { return shapeId; }
+            set { shapeId = value; }
+        }
         private DateTime dateCreated = DateTime.Today;
         public DateTime DateCreated { get; set; }
 
