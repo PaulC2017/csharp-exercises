@@ -6,7 +6,7 @@ namespace ClassDesignExercise
     {
         static void Main(string[] args)
         {
-            Circle newCircle = new Circle("Round 1", "Circle", 4.4);
+            Circle newCircle = new Circle("Circle 1", "Circle", 4.4);
            
              
             Console.WriteLine("New Circle Shape type = " + newCircle.ShapeType);
@@ -31,6 +31,25 @@ namespace ClassDesignExercise
             Console.WriteLine("The area of circle " + newCircle.Name + " with radiuus " + newCircle.Radiuus + " is " + newCircle.Area());
 
             Console.ReadLine();
+
+
+            Rectangle newRectangle = new Rectangle("Rectangle 1","Rectangle", 3.8, 4.4);
+
+            Console.WriteLine("New Rectangle Shape type = " + newRectangle.ShapeType);
+            Console.WriteLine("New Rectangle Name = " + newRectangle.Name);
+            Console.WriteLine("New Rectangle Date Created = " + newRectangle.DateCreated);
+            Console.WriteLine("New Rectangle Id = " + newRectangle.ShapeId);
+            Console.WriteLine("New Rectangle Length = " + newRectangle.Length);
+            Console.WriteLine("New Rectangle Width = " + newRectangle.Width);
+            Console.WriteLine("The area of Rectangle " + newRectangle.Name + " with Length " + newRectangle.Length +
+                              " and Width " + newRectangle.Width +  " is " + newRectangle.Area());
+
+            Console.ReadLine();
+
+            newRectangle.ShapeType = "Oblong";
+
+            Console.ReadLine();
+
         }
     }
 
@@ -88,12 +107,12 @@ namespace ClassDesignExercise
         {
 
 
-            private double radiuus;
-            public double Radiuus { get; set; }
+           private double radiuus;
+           public double Radiuus { get { return radiuus; } set { radiuus = value; } }
            
 
             private string name;
-            public string Name { get; set; }
+            public string Name { get { return name; } set { name = value; } }
             
 
         public Circle(string name, string shapeType, double radiuss) : base( shapeType)
@@ -102,27 +121,116 @@ namespace ClassDesignExercise
                Radiuus = radiuss;
             }
 
-            public  double Area()
-            {
+         public  double Area()
+         {
             return  Math.PI * Radiuus * Radiuus;
            
-            } 
+         } 
 
         }
 
 
 
-        /* class Rectangle : Shape
+         class Rectangle : Shape
          {
-                 private string name;
-                 public string Name { get; set; }
-             }
+            private string name;
+            public string Name
+            {
+            get { return name; }
+            set { name = value; }
+            }
+            private double length;
+             public double Length
+              {
+                  get { return length; }
 
-         class Square : Rectangle
-         {
-                 private string name;
-                 public string Name { get; set; }
-             }
-          */
+
+                  set
+                  {
+
+                      bool correctLength = false;
+
+                      do
+                      {
+
+                        if (value < 0 )
+                        {
+
+                            Console.WriteLine("Invalid Lewngth  - Must be a Positive Number");
+                            Console.WriteLine("Enter Length");
+                            value = double.Parse(Console.ReadLine());
+                        }
+
+                        else { length = value; correctLength = true; }
+
+
+                      } while (correctLength == false);
+                  }
+              } 
+             private double width;
+             public double Width
+             {
+
+                get { return width; }
+
+
+                set
+                {
+
+                    bool correctWidth = false;
+
+                    do
+                    {
+
+                        if (value < 0)
+                        {
+
+                            Console.WriteLine("Invalid Lewngth  - Must be a Positive Number");
+                            Console.WriteLine("Enter Length");
+                            value = double.Parse(Console.ReadLine());
+                        }
+
+                        else { width = value; correctWidth = true; }
+
+
+                    } while (correctWidth == false);
+
+                }
+             }            
+        
+        public Rectangle(string name, string shapeType, double length, double width) : base(shapeType)
+        {
+            Name = name;
+            Length = length;
+            Width = width;
+   
+        }
+
+        public double Area()
+        {
+            return Length * Width;
+
+        }
+
+        
+    }
+
+    /* class Square : Rectangle
+    {
+            private string name;
+            public string Name { get; set; }
+
+
+   public Square(string name, string shapeType, double length, double width) : base (shapeType)
+   {
+       Name = name;
+       Length = length;
+       Width = width;
+
+   }
+   */
+
 }
+          
+
 
