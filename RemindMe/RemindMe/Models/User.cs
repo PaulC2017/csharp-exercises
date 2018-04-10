@@ -10,19 +10,25 @@ namespace RemindMe.Models
       
         public string Username { get; set; }
         public string Email { get; set; }
+        public string GCalEmail { get; set; }
         public string Password { get; set; }
-        public string CreateDate { get; set; }
+        public string UserCreateDate { get; set; }
 
 
         public int UserId { get; set; }
-        private static int nextId = 1;
+        private static int nextUserId = 1;
+
+        public IList<UserEventTypesNonRecurring> UserEventTypesNonRecurring { get; set; }
+
+        public IList<UserEventTypesNonRecurring> UserEventTypesRecurring { get; set; }
+
 
         //default constructor
         public User()
         {
-            UserId = nextId;
-            nextId++;
-            CreateDate = DateTime.Today.ToString("MM/dd/yyyy");
+            UserId = nextUserId;
+            nextUserId++;
+            UserCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
             
         }
         
