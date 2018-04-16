@@ -16,29 +16,33 @@ namespace RemindMe.Models
         public string NonRecurringReminderSecondAlertTime { get; set; }
         public string NonRecuringReminderAlertFrequency { get; set; }  //how often the alert is sent for an event
 
-        public int NonRecurringReminderId { get; set; }
-        private static int nextNonRecurringReminderId = 1;
+        public IList<User> UsersOfNonRecurringReminders { get; set; }
+
+        //public int NonRecurringReminderId { get; set; }
+        //private static int nextNonRecurringReminderId = 1;
+
+        public int ID { get; set; }
 
         //default constructor
         public NonRecurringReminders()
         {
-            NonRecurringReminderId = nextNonRecurringReminderId;
-            nextNonRecurringReminderId++;
+           // NonRecurringReminderId = nextNonRecurringReminderId;
+           // nextNonRecurringReminderId++;
             NonRecuringReminderCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
 
         }
         //non default constructor
-        public NonRecurringReminders(string recurringReminderName, string recurringReminderDescription, string recurringReminderStartAlertDate,
-                                string recurringReminderLastAlertDate, string recurringReminderFirstAlertTime,
-                                string recurringReminderSecondAlertTime, string recuringReminderAlertFrequency) : this()
+        public NonRecurringReminders(string nonRecurringReminderName, string nonRecurringReminderDescription, string nonRecurringReminderStartAlertDate,
+                                string nonRecurringReminderLastAlertDate, string nonRecurringReminderFirstAlertTime,
+                                string nonRecurringReminderSecondAlertTime, string nonRecuringReminderAlertFrequency) : this()
         {
-            NonRecurringReminderName = recurringReminderName;
-            NonRecurringReminderDescription = recurringReminderDescription;
-            NonRecurringReminderStartAlertDate = RemoveChar(recurringReminderStartAlertDate, "/");
-            NonRecurringReminderLastAlertDate = RemoveChar(recurringReminderLastAlertDate, "/");
-            NonRecurringReminderFirstAlertTime = ConvertTo24HourFormat(recurringReminderFirstAlertTime);
-            NonRecurringReminderSecondAlertTime = ConvertTo24HourFormat(recurringReminderSecondAlertTime);
-            NonRecuringReminderAlertFrequency = recuringReminderAlertFrequency;
+            NonRecurringReminderName = nonRecurringReminderName;
+            NonRecurringReminderDescription = nonRecurringReminderDescription;
+            NonRecurringReminderStartAlertDate = RemoveChar(nonRecurringReminderStartAlertDate, "/");
+            NonRecurringReminderLastAlertDate = RemoveChar(nonRecurringReminderLastAlertDate, "/");
+            NonRecurringReminderFirstAlertTime = ConvertTo24HourFormat(nonRecurringReminderFirstAlertTime);
+            NonRecurringReminderSecondAlertTime = ConvertTo24HourFormat(nonRecurringReminderSecondAlertTime);
+            NonRecuringReminderAlertFrequency = nonRecuringReminderAlertFrequency;
         }
         public string RemoveChar(string theString, string charsToRemove)
         {

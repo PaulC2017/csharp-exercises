@@ -9,9 +9,11 @@ namespace RemindMe.Models
     {
       
         public string Username { get; set; }
+        public string Password { get; set; }
         public string Email { get; set; }
         public string GCalEmail { get; set; }
-        public string Password { get; set; }
+        public string GCalEmailPassword { set; get; }
+        
         public string UserCreateDate { get; set; }
 
 
@@ -20,7 +22,14 @@ namespace RemindMe.Models
 
         public IList<UserEventTypesNonRecurring> UserEventTypesNonRecurring { get; set; }
 
-        public IList<UserEventTypesNonRecurring> UserEventTypesRecurring { get; set; }
+        public IList<UserEventTypesRecurring> UserEventTypesRecurring { get; set; }
+
+        public int RecurringReminderId { get; set; }
+        public RecurringReminders RecurringReminderName { get; set; }
+        
+        public int NonRecurringReminderId { get; set; }
+        public NonRecurringReminders NonRecurringReminderName { get; set; }
+
 
 
         //default constructor

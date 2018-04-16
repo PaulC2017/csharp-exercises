@@ -17,14 +17,19 @@ namespace RemindMe.Models
         public string RecuringReminderAlertFrequency { get; set; }  // how often the alert is sent for an event
         public string RecurringReminderRepeatFrequency { get; set; }  // does the event repeat annually, monthly, etc?
 
-        public int RecurringReminderId { get; set; }
-        private static int nextRecurringReminderId = 1;
+        public IList <User> UsersOfRecurringReminders { get; set; }
+
+        //public int RecurringReminderId { get; set; }
+        // private static int nextRecurringReminderId = 1;
+
+        public int ID { get; set; }
+
 
         //default constructor
         public RecurringReminders()
         {
-            RecurringReminderId = nextRecurringReminderId;
-            nextRecurringReminderId++;
+            //RecurringReminderId = nextRecurringReminderId;
+            //nextRecurringReminderId++;
             RecuringReminderCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
 
         }

@@ -11,16 +11,18 @@ namespace RemindMe.Models
         public string RecurringEventDescription { get; set; }
         public string RecuringEventCreateDate { get; set; }
 
-        public int RecurringEventId { get; set; }
+        /*public int RecurringEventId { get; set; }
         private static int nextRecurringEventId = 1;
-
+        */
+        public int ID { get; set; }
         public IList<User> User { get; set; }
 
+        
         //default constructor
         public EventTypesRecurring()
         {
-            RecurringEventId = nextRecurringEventId;
-            nextRecurringEventId++;
+            //RecurringEventId = nextRecurringEventId;
+            //nextRecurringEventId++;
             RecuringEventCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
 
         }
@@ -32,6 +34,6 @@ namespace RemindMe.Models
            
 
         }
-
+        
     }
 }

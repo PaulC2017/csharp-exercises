@@ -11,16 +11,20 @@ namespace RemindMe.Models
         public string NonRecurringEventDescription { get; set; }
         public string NonRecuringEventCreateDate { get; set; }
 
-        public int NonRecurringEventId { get; set; }
-        private static int nextNonRecurringEventId = 1;
+       // public int NonRecurringEventId { get; set; }
+       // private static int nextNonRecurringEventId = 1;
+
+       //added these lines to try to fix the error nee4d to add a primary key to this model
+         
+       public int ID { get; set; }
 
         public IList<User> User { get; set; }
         
         //default constructor
         public EventTypesNonRecurring()
         {
-            NonRecurringEventId = nextNonRecurringEventId;
-            nextNonRecurringEventId++;
+            //NonRecurringEventId = nextNonRecurringEventId;
+            //nextNonRecurringEventId++;
             NonRecuringEventCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
 
         }
