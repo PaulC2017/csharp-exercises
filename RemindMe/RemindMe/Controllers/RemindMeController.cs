@@ -34,13 +34,23 @@ namespace RemindMe.Controllers
         [HttpPost]
         public IActionResult RegisterUser(RegisterUserViewModel registerUserViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                User newUser = new User(registerUserViewModel.Username, registerUserViewModel.Email, registerUserViewModel.Password);
-                context.User.Add(newUser);
-                context.SaveChanges();
-                return View("UserHomePage");
+            //  check to see if the user name entered alredy exists
+            User checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
+
+            if (checkUserName.Username != null)
+                {
+                ViewBag.userNameExists = "This user name already exists.  Please select another user name";
+                return View(registerUserViewModel);
             }
+                if (ModelState.IsValid)
+                {
+                    User newUser = new User(registerUserViewModel.Username, registerUserViewModel.Password, registerUserViewModel.GCalEmail, registerUserViewModel.GCalEmailPassword);
+                    context.User.Add(newUser);
+                    context.SaveChanges();
+                    ViewBag.User = registerUserViewModel;
+                    return View("UserHomePage",newUser);
+                }
+            
             
             return View(registerUserViewModel);
 

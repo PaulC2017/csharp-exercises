@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using RemindMe.ViewModels;
+using RemindMe.Models;
+using RemindMe.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace RemindMe.Models
 {
     public class User
     {
-      
+       
+
+
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
@@ -18,7 +25,7 @@ namespace RemindMe.Models
 
 
         public int UserId { get; set; }
-        private static int nextUserId = 1;
+        //private static int nextUserId = 1;
 
         public IList<UserEventTypesNonRecurring> UserEventTypesNonRecurring { get; set; }
 
@@ -35,24 +42,24 @@ namespace RemindMe.Models
         //default constructor
         public User()
         {
-            UserId = nextUserId;
-            nextUserId++;
+            //UserId = nextUserId;
+            //nextUserId++;
             UserCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
             
         }
-        
+
         //non default constructor
-        public User(string username, string email, string password) : this()
+        public User(string username, string password, string gCalEmail, string gCalEmailPassword) : this()
         {
             Username = username;
-            Email = email;
             Password = password;
+            GCalEmail = gCalEmail;
+            GCalEmailPassword = gCalEmailPassword;
 
         }
+      
 
-
-
-
+        
 
     }
 }
