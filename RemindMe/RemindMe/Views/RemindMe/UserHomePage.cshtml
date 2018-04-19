@@ -15,14 +15,16 @@
             <th>Login ID</th>
             <th>Member Since</th>
             <th>Google Email ID</th>
-            <th>Reminders</th>
+            <th>View</th>
+            <th>Schedule</th>
         </tr>
 
         <tr>
             <td>@Model.Username</td>
             <td>@Model.UserCreateDate</td>
             <td>@Model.GCalEmail</td>
-            <td><a asp-controller="User" asp-action="Reminders" asp-route-id="@ViewBag.UserId">View and Schedule Reminders</a></td>
+            <td><a asp-controller="RemindMe" asp-action="Reminders" asp-route-id="@ViewBag.UserId">Events and Reminders</a></td>
+            <td><a asp-controller="RemindMe" asp-action="Reminders" asp-route-id="@ViewBag.UserId">Events and Reminders</a></td>
         </tr>
 
 

@@ -22,9 +22,13 @@ namespace RemindMe.Controllers
 
         public IActionResult Index()
         {
+            // begin checking schedule to send out reminders
+
+           // CheckSchedule.Main();
             return View();
         }
-
+       
+        
         public IActionResult RegisterUser()
         {
             RegisterUserViewModel newUser = new RegisterUserViewModel();
@@ -55,6 +59,45 @@ namespace RemindMe.Controllers
             return View(registerUserViewModel);
 
         }
+
+        public IActionResult UserLogin()
+        {
+            UserLoginViewModel returningUser = new UserLoginViewModel();
+            return View(returningUser);
+        }
+        [HttpPost]
+        public IActionResult Userlogin(UserLoginViewModel userLoginViewModel)
+        {
+            //  check to see if the user name exists
+
+            try
+            {
+                User checkUserLogInUserName = context.User.Single(u => u.Username == userLoginViewModel.Username);
+            }
+            catch (System.InvalidOperationException)
+            {
+                ViewBag.userNameNotFound = "User Name was not found";
+                return View(userLoginViewModel);
+            }
+            User checkUserLogInInfo = context.User.Single(u => u.Username == userLoginViewModel.Username);
+            if (ModelState.IsValid)
+            {
+                if (checkUserLogInInfo.Password != userLoginViewModel.Password)
+                {
+                    ViewBag.userPasswordNotCorrect = "The password entered is invalid";
+                    return View(userLoginViewModel);
+                }
+                
+                return View("UserHomePage", checkUserLogInInfo);
+            }
+
+
+            return View(userLoginViewModel);
+
+        }
+
+
+
 
         public IActionResult UserHomePage()
         {
