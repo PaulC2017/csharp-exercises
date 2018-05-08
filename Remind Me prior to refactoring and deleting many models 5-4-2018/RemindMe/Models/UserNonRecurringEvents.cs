@@ -7,10 +7,11 @@ namespace RemindMe.Models
 {
     public class UserNonRecurringEvents
     {
-        public int UserID { get; set; }
+        public int ID { get; set; }
         public User User { get; set; }
-
+        /*
         public int NonRecurringEventsID { get; set; }
         public NonRecurringEvents NonRecurringEvents { get; set; }
+        */
     }
 }
