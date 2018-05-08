@@ -63,13 +63,29 @@ namespace RemindMe.Controllers
                 }
             }
             */
+
             //check to see if the user name entered already exists
+             
 
+            //checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
 
+            User checkUserName = context.User.FirstOrDefault(u => u.Username == registerUserViewModel.Username);
+
+            if (checkUserName != null)
+            { 
                 ViewBag.userNameExists = "This user name already exists.  Please select another user name";
                 ViewBag.colon = ":";
                 return View(registerUserViewModel);
-            
+            }
+            if (ModelState.IsValid)
+            {
+                User newUser = new User(registerUserViewModel.Username, registerUserViewModel.Password, registerUserViewModel.GCalEmail, registerUserViewModel.GCalEmailPassword);
+                context.User.Add(newUser);
+                context.SaveChanges();
+                ViewBag.User = registerUserViewModel;
+                return View("UserHomePage", newUser);
+            }
+            return View(registerUserViewModel);
             /*User checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
             User checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
             if (checkUserName.Username != null)
@@ -88,7 +104,7 @@ namespace RemindMe.Controllers
             */
 
 
-           
+
 
         }
 
