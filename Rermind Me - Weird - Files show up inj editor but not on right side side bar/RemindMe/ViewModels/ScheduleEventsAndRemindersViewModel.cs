@@ -43,13 +43,12 @@ namespace RemindMe.ViewModels
         [Display(Name = "Repeat Alert Frequency (ie - monthly, annually)")]
         public string RecurringReminderRepeatFrequency { get; set; }
 
-        //*public string RecuringReminderCreateDate { get; set; }
-        //public int ID { get; set; }*/
         [Required]
         [Display(Name = "User")]
         public int UserId { get; set; }
 
         public List<SelectListItem> Users { get; set; }
+        public string currentUser;
 
         public ScheduleEventsAndRemindersViewModel()  // default constructor needed to make model binding work in the EntityFramework 
         {

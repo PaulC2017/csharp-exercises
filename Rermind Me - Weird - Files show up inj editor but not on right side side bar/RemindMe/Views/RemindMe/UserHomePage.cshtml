@@ -2,10 +2,11 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    ViewData["currentUser"] = Model.Username;
 }
 
 
-    <h2>Welcome @Model.Username</h2>
+<h2>Welcome @Model.Username</h2>
 
 
 <form method="get">

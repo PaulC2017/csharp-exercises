@@ -7,6 +7,7 @@ using RemindMe.ViewModels;
 using RemindMe.Models;
 using RemindMe.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace RemindMe.Controllers
 {
@@ -38,31 +39,7 @@ namespace RemindMe.Controllers
         [HttpPost]
         public IActionResult RegisterUser(RegisterUserViewModel registerUserViewModel)
         {
-            //   In the Register User IAction Result in the RemindeMe Controller
-            //  the try/catch is necessary in case 
-            //   the User table has no entries.
-            //
-            //
-            /*
-             * This code is necessary if there are no records in the User database - Once there
-             * are records in teh User database this code is not necessary!!!
-             * 
-             * try
-            {
-                User checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
-            }
-            catch (System.InvalidOperationException)
-            {
-                if (ModelState.IsValid)
-                {
-                    User newUser = new User(registerUserViewModel.Username, registerUserViewModel.Password, registerUserViewModel.GCalEmail, registerUserViewModel.GCalEmailPassword);
-                    context.User.Add(newUser);
-                    context.SaveChanges();
-                    ViewBag.User = registerUserViewModel;
-                    return View("UserHomePage", newUser);
-                }
-            }
-            */
+            
 
             //check to see if the user name entered already exists
              
@@ -83,29 +60,13 @@ namespace RemindMe.Controllers
                 context.User.Add(newUser);
                 context.SaveChanges();
                 ViewBag.User = registerUserViewModel;
+                ViewData["currentUser"] = registerUserViewModel.Username;
+                HttpContext.Session.SetString("Username", registerUserViewModel.Username);
                 return View("UserHomePage", newUser);
+                
             }
             return View(registerUserViewModel);
-            /*User checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
-            User checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
-            if (checkUserName.Username != null)
-                {
-                ViewBag.userNameExists = "This user name already exists.  Please select another user name";
-                return View(registerUserViewModel);
-            }
-                if (ModelState.IsValid)
-                {
-                    User newUser = new User(registerUserViewModel.Username, registerUserViewModel.Password, registerUserViewModel.GCalEmail, registerUserViewModel.GCalEmailPassword);
-                    context.User.Add(newUser);
-                    context.SaveChanges();
-                    ViewBag.User = registerUserViewModel;
-                    return View("UserHomePage",newUser);
-                }
-            */
-
-
-
-
+            
         }
 
         public IActionResult UserLogin()
@@ -128,6 +89,8 @@ namespace RemindMe.Controllers
                 return View(userLoginViewModel);
             }
             User checkUserLogInInfo = context.User.Single(u => u.Username == userLoginViewModel.Username);
+            
+
             if (ModelState.IsValid)
             {
                 if (checkUserLogInInfo.Password != userLoginViewModel.Password)
@@ -135,7 +98,8 @@ namespace RemindMe.Controllers
                     ViewBag.userPasswordNotCorrect = "The password entered is invalid";
                     return View(userLoginViewModel);
                 }
-                
+
+                HttpContext.Session.SetString("Username", userLoginViewModel.Username);
                 return View("UserHomePage", checkUserLogInInfo);
             }
 
@@ -148,7 +112,7 @@ namespace RemindMe.Controllers
 
         {
             ScheduleEventsAndRemindersViewModel scheduleEventsAndReminder = new ScheduleEventsAndRemindersViewModel(context.User.ToList());
-
+            ViewBag.Username = HttpContext.Session.GetString("Username");
 
             return View(scheduleEventsAndReminder);
         }
@@ -162,6 +126,7 @@ namespace RemindMe.Controllers
             {
                 // create recurring reminder record
 
+                User testNewUser = context.User.Single(u=> u.Username == ViewData["currentUser"].ToString());
                 User newUser = context.User.Single(u => u.ID == newEventAndReminder.UserId);
                 RecurringReminders newRecurringReminder = new RecurringReminders(newEventAndReminder.RecurringEventName,
                                                               newEventAndReminder.RecurringEventDescription,
@@ -169,7 +134,8 @@ namespace RemindMe.Controllers
                                                               newEventAndReminder.RecurringReminderLastAlertDate,
                                                               newEventAndReminder.RecurringReminderRepeatFrequency);
                 newRecurringReminder.User= newUser;
-
+                
+            
                 context.RecurringReminders.Add(newRecurringReminder);
 
                 // create recurring event record
