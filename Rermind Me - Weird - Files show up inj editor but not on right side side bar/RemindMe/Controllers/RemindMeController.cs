@@ -109,11 +109,14 @@ namespace RemindMe.Controllers
         }
 
         public IActionResult ScheduleEventsAndReminders()
-
         {
             ScheduleEventsAndRemindersViewModel scheduleEventsAndReminder = new ScheduleEventsAndRemindersViewModel(context.User.ToList());
+            
+            if (HttpContext.Session.GetString("Username") == "")
+            {
+                return View("Index");
+            }
             ViewBag.Username = HttpContext.Session.GetString("Username");
-
             return View(scheduleEventsAndReminder);
         }
 
@@ -126,8 +129,9 @@ namespace RemindMe.Controllers
             {
                 // create recurring reminder record
 
-                User testNewUser = context.User.Single(u=> u.Username == ViewData["currentUser"].ToString());
-                User newUser = context.User.Single(u => u.ID == newEventAndReminder.UserId);
+               
+                //User newUser = context.User.Single(u => u.ID == newEventAndReminder.UserId);
+                User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
                 RecurringReminders newRecurringReminder = new RecurringReminders(newEventAndReminder.RecurringEventName,
                                                               newEventAndReminder.RecurringEventDescription,
                                                               newEventAndReminder.RecurringReminderStartAlertDate,
@@ -156,14 +160,26 @@ namespace RemindMe.Controllers
                 return View(newEventAndReminder);
         }
 
+        /*public IActionResult ViewEventsAndReminders()
+        {
+           if ( HttpContext.Session.GetString("Username")  == "")
+              {
+                return View("Index");
+              }
 
-           
-        
+        }
+        */
+        public IActionResult UserLogout()
+        {
+            HttpContext.Session.SetString("Username", "");
+            return View("Index");
+        }
+
+
         public IActionResult UserHomePage()
         {
-
-            return View();
-
+            User currentUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
+            return View(currentUser);
         }
 
 
