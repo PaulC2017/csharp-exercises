@@ -147,6 +147,7 @@ namespace RemindMe.Controllers
                 User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
                 RecurringReminders newRecurringReminder = new RecurringReminders(newEventAndReminder.RecurringEventName,
                                                               newEventAndReminder.RecurringEventDescription,
+                                                              newEventAndReminder.RecurringEventDate,
                                                               newEventAndReminder.RecurringReminderStartAlertDate,
                                                               newEventAndReminder.RecurringReminderLastAlertDate,
                                                               newEventAndReminder.RecurringReminderRepeatFrequency,
@@ -156,16 +157,19 @@ namespace RemindMe.Controllers
             
                 context.RecurringReminders.Add(newRecurringReminder);
 
-                // create recurring event record
+                /* create recurring event record
                 RecurringEvents newEventTypeRecurring = new RecurringEvents(newEventAndReminder.RecurringEventName, 
-                                                                            newEventAndReminder.RecurringEventDescription);
+                                                                            newEventAndReminder.RecurringEventDescription,
+                                                                            newEventAndReminder.RecurringEventDate);
                 newEventTypeRecurring.User = newUser;
 
                 context.RecurringEvents.Add(newEventTypeRecurring);
+                */
 
                 // save the new event and reminder to the data base
 
                 context.SaveChanges();
+                ViewBag.eventDate = newEventAndReminder.RecurringEventDate;
                 return View("RecurringEventsAndReminders", newRecurringReminder);
 
             }
@@ -237,6 +241,7 @@ namespace RemindMe.Controllers
                                               {
                                                ch.RecurringReminderName,
                                                ch.RecurringReminderDescription,
+                                               ch.RecurringEventDate,
                                                ch.RecuringReminderCreateDate,
                                                ch.RecurringReminderStartAlertDate,
                                                ch.RecurringReminderLastAlertDate,

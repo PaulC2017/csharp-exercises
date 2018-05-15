@@ -8,8 +8,9 @@ namespace RemindMe.Models
     public class RecurringReminders 
     {
         public int ID { get; set; }
-        public string RecurringReminderName { get; set; }
-        public string RecurringReminderDescription { get; set; }
+        public string RecurringReminderName { get; set; }  // this is also the event name
+        public string RecurringReminderDescription { get; set; } // this is also the event description
+        public string RecurringEventDate { get; set; }
         public string RecuringReminderCreateDate { get; set; }
         public string RecurringReminderStartAlertDate { get;set;}
         public string RecurringReminderLastAlertDate { get; set; }
@@ -31,7 +32,7 @@ namespace RemindMe.Models
             RecurringReminderSecondAlertTime = "1500";
         }
         //non default constructor
-        public RecurringReminders(string recurringReminderName, string recurringReminderDescription,string recurringReminderStartAlertDate, 
+        public RecurringReminders(string recurringReminderName, string recurringReminderDescription,string recurringEventDate,string recurringReminderStartAlertDate, 
                                 string recurringReminderLastAlertDate, 
                                  string recuringReminderAlertFrequency,string recurringReminderRepeatFrequency) : this()
         {
@@ -41,6 +42,7 @@ namespace RemindMe.Models
             RecurringReminderLastAlertDate = RemoveChar(recurringReminderLastAlertDate, "/");    
             RecuringReminderAlertFrequency = recuringReminderAlertFrequency;
             RecurringReminderRepeatFrequency = recurringReminderRepeatFrequency;
+            RecurringEventDate = recurringEventDate;
         }
         public string RemoveChar(string theString, string charsToRemove)
         {

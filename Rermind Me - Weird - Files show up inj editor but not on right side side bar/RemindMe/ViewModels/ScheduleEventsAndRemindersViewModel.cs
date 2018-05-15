@@ -17,13 +17,19 @@ namespace RemindMe.ViewModels
         [Display(Name = "Event Name")]
         public string RecurringEventName { get; set; }
 
-        // we will use this value for the RecurringReminderName in teh controller
+        // we will use this value for the RecurringReminderName in the controller
 
         [Required(ErrorMessage = "A description of the event is requred")]
         [Display(Name = "Event Description")]
         public string RecurringEventDescription { get; set; }
 
         // we will use this value for the RecurringReminderDescription in the controller
+
+        [Required(ErrorMessage = "The date of the event is requred")]
+        [DataType(DataType.Date)]
+        [Display(Name = "Event Date")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        public string RecurringEventDate { get; set; }
 
         [Required(ErrorMessage = "Enter the date you want to start receiving the text message alerts")]
         [DataType(DataType.Date)]

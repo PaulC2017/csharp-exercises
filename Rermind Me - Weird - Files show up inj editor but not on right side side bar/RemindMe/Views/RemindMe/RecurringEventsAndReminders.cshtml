@@ -11,6 +11,7 @@
         <tr>
             <th>Event Name</th>
             <th>Event Description</th>
+            <th>Event Date</th>
             <th>Date to Start alerts</th>
             <th>Date to stop alerts</th>
             <th>Recurring Frequency</th>
@@ -19,6 +20,7 @@
         <tr>
             <td>@Model.RecurringReminderName</td>
             <td>@Model.RecurringReminderDescription</td>
+            <td>@ViewBag.eventDate</td>
             <td>@Model.RecurringReminderStartAlertDate</td>
             <td>@Model.RecurringReminderLastAlertDate</td>
             <td>@Model.RecurringReminderRepeatFrequency</td>

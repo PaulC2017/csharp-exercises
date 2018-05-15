@@ -11,9 +11,10 @@ using System;
 namespace RemindMe.Migrations
 {
     [DbContext(typeof(RemindMeDbContext))]
-    partial class RemindMeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180515205942_Added Event Date to Recurring Reminders Table with some changes")]
+    partial class AddedEventDatetoRecurringRemindersTablewithsomechanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

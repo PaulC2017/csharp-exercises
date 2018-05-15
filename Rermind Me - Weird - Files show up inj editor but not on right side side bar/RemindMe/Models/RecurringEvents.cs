@@ -10,6 +10,7 @@ namespace RemindMe.Models
         public int ID { get; set; }
         public string RecurringEventName { get; set; }
         public string RecurringEventDescription { get; set; }
+        public string RecurringEventDate { get; set; }
         public string RecuringEventCreateDate { get; set; }
 
         public int UserId { get; set; }
@@ -24,11 +25,11 @@ namespace RemindMe.Models
 
         }
         //non default constructor
-        public RecurringEvents(string recurringEventName, string recurringEventDescription) : this()
+        public RecurringEvents(string recurringEventName, string recurringEventDescription, string recurringEventDate) : this()
         {
             RecurringEventName = recurringEventName;
             RecurringEventDescription = recurringEventDescription;
-
+            RecurringEventDate = recurringEventDate;
 
         }
 
