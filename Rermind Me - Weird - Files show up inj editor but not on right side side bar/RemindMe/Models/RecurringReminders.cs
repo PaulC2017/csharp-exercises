@@ -33,14 +33,14 @@ namespace RemindMe.Models
         //non default constructor
         public RecurringReminders(string recurringReminderName, string recurringReminderDescription,string recurringReminderStartAlertDate, 
                                 string recurringReminderLastAlertDate, 
-                                 string recuringReminderAlertFrequency) : this()
+                                 string recuringReminderAlertFrequency,string recurringReminderRepeatFrequency) : this()
         {
             RecurringReminderName = recurringReminderName;
             RecurringReminderDescription = recurringReminderDescription;
             RecurringReminderStartAlertDate = RemoveChar(recurringReminderStartAlertDate,"/");   
             RecurringReminderLastAlertDate = RemoveChar(recurringReminderLastAlertDate, "/");    
             RecuringReminderAlertFrequency = recuringReminderAlertFrequency;
-           
+            RecurringReminderRepeatFrequency = recurringReminderRepeatFrequency;
         }
         public string RemoveChar(string theString, string charsToRemove)
         {

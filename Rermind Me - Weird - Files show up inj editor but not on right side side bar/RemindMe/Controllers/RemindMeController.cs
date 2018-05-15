@@ -66,13 +66,14 @@ namespace RemindMe.Controllers
             }
             if (ModelState.IsValid)
             {
-                User newUser = new User(registerUserViewModel.Username, registerUserViewModel.Password, registerUserViewModel.GCalEmail, registerUserViewModel.GCalEmailPassword);
+                User newUser = new User(registerUserViewModel.Username, registerUserViewModel.Password, registerUserViewModel.GCalEmail, registerUserViewModel.GCalEmailPassword, registerUserViewModel.CellPhoneNumber);
                 context.User.Add(newUser);
                 context.SaveChanges();
                 ViewBag.User = registerUserViewModel;
                 
                 HttpContext.Session.SetString("Username", newUser.Username);
                 HttpContext.Session.SetInt32("ID", newUser.ID);
+                HttpContext.Session.SetString("CellPhoneNumber", newUser.CellPhoneNumber);
                 return View("UserHomePage", newUser);
                 
             }
@@ -148,6 +149,7 @@ namespace RemindMe.Controllers
                                                               newEventAndReminder.RecurringEventDescription,
                                                               newEventAndReminder.RecurringReminderStartAlertDate,
                                                               newEventAndReminder.RecurringReminderLastAlertDate,
+                                                              newEventAndReminder.RecurringReminderRepeatFrequency,
                                                               newEventAndReminder.RecurringReminderRepeatFrequency);
                 newRecurringReminder.User= newUser;
                 
@@ -225,7 +227,7 @@ namespace RemindMe.Controllers
                 return View("Index");
             }
 
-
+            ViewBag.Username = HttpContext.Session.GetString("Username");
             dynamic userRecurringReminders = (from ch in context.RecurringReminders
                                               join
                                               ca in context.User

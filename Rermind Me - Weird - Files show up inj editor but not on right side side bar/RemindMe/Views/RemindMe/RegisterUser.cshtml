@@ -32,32 +32,25 @@
             <span asp-validation-for="VerifyPassword"></span>
         </div>
         <div class="form-group">
-            <label asp-for="GCalEmail"></label>
-            <input class="form-control" asp-for="GCalEmail" />
-            <span asp-validation-for="GCalEmail"></span>
+            <label asp-for="CellPhoneNumber"></label>
+            <input class="form-control" asp-for="CellPhoneNumber" />
+            <span asp-validation-for="CellPhoneNumber"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="GCalEmailPassword"></label>
-            <input class="form-control" asp-for="GCalEmailPassword" />
-            <span asp-validation-for="GCalEmailPassword"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="VerifyGCalEmailPassword"></label>
-            <input class="form-control" asp-for="VerifyGCalEmailPassword" />
-            <span asp-validation-for="VerifyGCalEmailPassword"></span>
-        </div>
+         <div class="form-group">
+                <label asp-for="GCalEmail"></label>
+                <input class="form-control" asp-for="GCalEmail" />
+                <span asp-validation-for="GCalEmail"></span>
+         </div>
+         <div class="form-group">
+                <label asp-for="GCalEmailPassword"></label>
+                <input class="form-control" asp-for="GCalEmailPassword" />
+                <span asp-validation-for="GCalEmailPassword"></span>
+         </div>
+         <div class="form-group">
+                <label asp-for="VerifyGCalEmailPassword"></label>
+                <input class="form-control" asp-for="VerifyGCalEmailPassword" />
+                <span asp-validation-for="VerifyGCalEmailPassword"></span>
+         </div>
 
-        
-        @*
-        <div class="form-group">
-            <label type="hidden" asp-for="CreateDate"></label>   No label needed since the user doesn't input these values - the app calculates and populates them 
-        <input type="hidden" class="form-control" asp-for="UserCreateDate" />
-        </div>
-
-        <div class="form-group">
-            <label type="hidden" asp-for="UserId"></label> No label needed since the user doesn't input these values - the app calculates and populates them
-            <input type="hidden" class="form-control" asp-for="ID" />
-        </div>
-        *@
-        <input type="submit" value="Submit" />
+         <input type="submit" value="Submit" />
     </form>

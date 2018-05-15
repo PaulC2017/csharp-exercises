@@ -20,6 +20,7 @@ namespace RemindMe.Models
         public string Email { get; set; }
         public string GCalEmail { get; set; }
         public string GCalEmailPassword { set; get; }
+        public string CellPhoneNumber { get; set; }
         public string UserCreateDate { get; set; }
 
        
@@ -40,12 +41,13 @@ namespace RemindMe.Models
         }
 
         //non default constructor
-        public User(string username, string password, string gCalEmail, string gCalEmailPassword) : this()
+        public User(string username, string password, string gCalEmail, string gCalEmailPassword, string cellPhoneNumber) : this()
         {
             Username = username;
             Password = password;
             GCalEmail = gCalEmail;
             GCalEmailPassword = gCalEmailPassword;
+            CellPhoneNumber = cellPhoneNumber;
 
         }
       

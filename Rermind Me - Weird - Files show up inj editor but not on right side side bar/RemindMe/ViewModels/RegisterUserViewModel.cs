@@ -23,6 +23,10 @@ namespace RemindMe.ViewModels
         [Compare("Password")]
         public string VerifyPassword { get; set; }
 
+        [Required(ErrorMessage = "You must enter the cell phone number where reminder text messages will be sent")]
+        [Display(Name = "Cell Phone Number")]
+        public string CellPhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Your Google Calendar Email is Required")]
         [Display(Name = "Google Calendar Email")]
         [EmailAddress]
