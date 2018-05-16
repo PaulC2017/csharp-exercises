@@ -205,7 +205,7 @@ namespace RemindMe.Controllers
             //IList<RecurringReminders> userRecurringReminders = context.RecurringReminders.Include(u => u.User).ToList().Where(User == HttpContext.Session.GetString("Username") ) ;
             //IList<RecurringReminders> userRecurringReminders = context.RecurringReminders.Include(u => u.User).ToList();
             //IList<RecurringReminders> userRecurringReminders = context.RecurringReminders.Include(u => u.User).ToList();
-            var userRecurringReminders = from recurringReminder in context.RecurringReminders
+            var userRecurringReminders = (from recurringReminder in context.RecurringReminders
                                          where (recurringReminder.UserId == HttpContext.Session.GetInt32("ID"))
                                          select new
                                          {
@@ -214,7 +214,7 @@ namespace RemindMe.Controllers
                                              recurringReminder.RecurringReminderStartAlertDate,
                                              recurringReminder.RecurringReminderLastAlertDate,
                                              recurringReminder.RecurringReminderRepeatFrequency
-                                         };
+                                         });
 
            
            

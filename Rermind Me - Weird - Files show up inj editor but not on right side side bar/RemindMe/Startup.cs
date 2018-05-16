@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RemindMe.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Hangfire;
 
 namespace RemindMe
 {
@@ -24,14 +25,20 @@ namespace RemindMe
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
             services.AddDbContext<RemindMeDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //Sessions
             services.AddMemoryCache();
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.Name = ".RemindMe";
-            });
+            
+                                            });
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +64,14 @@ namespace RemindMe
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+           
+
+            //added for Hangfire
+            GlobalConfiguration.Configuration.UseSqlServerStorage((Configuration.GetConnectionString("DefaultConnection")));
+            app.UseHangfireDashboard();
+            app.UseHangfireServer();
         }
+        
     }
 }
