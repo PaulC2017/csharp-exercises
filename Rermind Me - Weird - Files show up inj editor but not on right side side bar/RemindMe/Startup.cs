@@ -27,7 +27,10 @@ namespace RemindMe
         {
             //Hangfire
             services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            //
+
             services.AddMvc();
+
             services.AddDbContext<RemindMeDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //Sessions
@@ -35,10 +38,7 @@ namespace RemindMe
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.Name = ".RemindMe";
-            
                                             });
-            
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

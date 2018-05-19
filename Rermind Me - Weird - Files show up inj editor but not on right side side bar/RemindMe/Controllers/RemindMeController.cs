@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System.Collections.ObjectModel;
 using System.Collections;
 using System.Dynamic;
-
+using Hangfire;
 
 
 
@@ -33,9 +33,8 @@ namespace RemindMe.Controllers
 
         public IActionResult Index()
         {
-            // begin checking schedule to send out reminders
-
-           // CheckSchedule.Main();
+            // send annual recurringreminders at 10:00 am every day
+            //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTexts("Annually"), "0 0 10 * * ? *");
             return View();
         }
        
@@ -43,6 +42,8 @@ namespace RemindMe.Controllers
         public IActionResult RegisterUser()
         {
             RegisterUserViewModel newUser = new RegisterUserViewModel();
+             
+
             return View(newUser);
         }
 
@@ -133,39 +134,30 @@ namespace RemindMe.Controllers
             return View(scheduleEventsAndReminder);
         }
 
+         
         [HttpPost]
         public IActionResult ScheduleEventsAndReminders(ScheduleEventsAndRemindersViewModel newEventAndReminder)
 
         {
-
+            
             if (ModelState.IsValid)
             {
                 // create recurring reminder record
-
-               
-                //User newUser = context.User.Single(u => u.ID == newEventAndReminder.UserId);
-                User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
-                RecurringReminders newRecurringReminder = new RecurringReminders(newEventAndReminder.RecurringEventName,
-                                                              newEventAndReminder.RecurringEventDescription,
-                                                              newEventAndReminder.RecurringEventDate,
-                                                              newEventAndReminder.RecurringReminderStartAlertDate,
-                                                              newEventAndReminder.RecurringReminderLastAlertDate,
-                                                              newEventAndReminder.RecurringReminderRepeatFrequency,
-                                                              newEventAndReminder.RecurringReminderRepeatFrequency);
-                newRecurringReminder.User= newUser;
                 
-            
+                User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
+                
+                RecurringReminders newRecurringReminder = new 
+                                 RecurringReminders(newEventAndReminder.RecurringEventName,
+                                 newEventAndReminder.RecurringEventDescription,
+                                 newEventAndReminder.RecurringEventDate,
+                                 newEventAndReminder.RecurringReminderStartAlertDate,
+                                 newEventAndReminder.RecurringReminderLastAlertDate,
+                                 newEventAndReminder.RecurringReminderRepeatFrequency);
+
+                newRecurringReminder.User= newUser;
+
                 context.RecurringReminders.Add(newRecurringReminder);
-
-                /* create recurring event record
-                RecurringEvents newEventTypeRecurring = new RecurringEvents(newEventAndReminder.RecurringEventName, 
-                                                                            newEventAndReminder.RecurringEventDescription,
-                                                                            newEventAndReminder.RecurringEventDate);
-                newEventTypeRecurring.User = newUser;
-
-                context.RecurringEvents.Add(newEventTypeRecurring);
-                */
-
+                
                 // save the new event and reminder to the data base
 
                 context.SaveChanges();
@@ -177,7 +169,8 @@ namespace RemindMe.Controllers
                 //ViewBag.User = registerUserViewModel;
                 return View(newEventAndReminder);
         }
-
+        
+        /*
         public IActionResult Test()
         {
            if ( HttpContext.Session.GetString("Username")  == "")
@@ -185,17 +178,7 @@ namespace RemindMe.Controllers
                 return View("Index");
               }
 
-            /*
-            // Generate List of Recurring Reminders
-            IList < RecurringReminders > recurringReminders =
-                               context.RecurringReminders.Include(rr => rr.User).ToList();
-            // reduce the list to those recurring reminders associated with the current user
-          
-
-            var userRecurringReminders = 
-                recurringReminders.Where(rr => rr.UserId == HttpContext.Session.GetInt32("ID"));
-           */
-
+           
 
 
 
@@ -211,18 +194,16 @@ namespace RemindMe.Controllers
                                          {
                                              recurringReminder.RecurringReminderName,
                                              recurringReminder.RecurringReminderDescription,
+                                             recurringReminder.RecurringEventDate,
                                              recurringReminder.RecurringReminderStartAlertDate,
                                              recurringReminder.RecurringReminderLastAlertDate,
                                              recurringReminder.RecurringReminderRepeatFrequency
-                                         });
-
-           
-           
-
-           
+                                         }).ToList();
+            
             return View(userRecurringReminders);
         }
         
+        */
        public ActionResult SingleUserRecurringEventsAndReminders()
        {
 
@@ -232,6 +213,8 @@ namespace RemindMe.Controllers
             }
 
             ViewBag.Username = HttpContext.Session.GetString("Username");
+            
+            
             dynamic userRecurringReminders = (from ch in context.RecurringReminders
                                               join
                                               ca in context.User
@@ -247,11 +230,25 @@ namespace RemindMe.Controllers
                                                ch.RecurringReminderLastAlertDate,
                                                ch.RecurringReminderFirstAlertTime,
                                                ch.RecurringReminderSecondAlertTime,
-                                               ch.RecuringReminderAlertFrequency,
                                                ch.RecurringReminderRepeatFrequency
                                               }).AsEnumerable().Select(c => c.ToExpando());
-            return View(userRecurringReminders);
+            
+            /*
+            var userRecurringReminders = (from recurringReminder in context.RecurringReminders
+                                          where (recurringReminder.UserId == HttpContext.Session.GetInt32("ID"))
+                                          select new
+                                          {
+                                              recurringReminder.RecurringReminderName,
+                                              recurringReminder.RecurringReminderDescription,
+                                              recurringReminder.RecurringEventDate,
+                                              recurringReminder.RecurringReminderStartAlertDate,
+                                              recurringReminder.RecurringReminderLastAlertDate,
+                                              recurringReminder.RecurringReminderRepeatFrequency
+                                          }).ToList();
+             */
 
+            return View(userRecurringReminders);
+             
         }
         
         public IActionResult UserLogout()
@@ -272,8 +269,23 @@ namespace RemindMe.Controllers
             return View(currentUser);
         }
 
+       
+         public string SendRecurringReminderTexts(string frequency)
+        {
+            // create a list of the reminders that are scheduled to go out
+            DateTime today = DateTime.Now;
+            //var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == frequency && 
+                                                                 // rr.RecurringReminderStartAlertDate.Date >= today && 
+                                                                  //rr.RecurringReminderLastAlertDate.Date <= today).ToList());
 
+            //retrieve cell phone numbers and link them to the Event/Reminder Name and the EventDate
 
+            //string[,] textsToSend = new string[rrDueToday.Count, 3];
+            // in the above array - element 0 is cell phone number, element 1 is event/reminder name and element 3 is eventdate
+            
+            return null;
+        }
+         
     }
-    
+
 }

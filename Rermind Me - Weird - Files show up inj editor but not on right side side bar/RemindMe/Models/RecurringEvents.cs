@@ -10,7 +10,7 @@ namespace RemindMe.Models
         public int ID { get; set; }
         public string RecurringEventName { get; set; }
         public string RecurringEventDescription { get; set; }
-        public string RecurringEventDate { get; set; }
+        public DateTime RecurringEventDate { get; set; }
         public string RecuringEventCreateDate { get; set; }
 
         public int UserId { get; set; }
@@ -21,11 +21,11 @@ namespace RemindMe.Models
         {
             //RecurringEventId = nextRecurringEventId;
             //nextRecurringEventId++;
-            RecuringEventCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
+           RecuringEventCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
 
         }
         //non default constructor
-        public RecurringEvents(string recurringEventName, string recurringEventDescription, string recurringEventDate) : this()
+        public RecurringEvents(string recurringEventName, string recurringEventDescription, DateTime recurringEventDate) : this()
         {
             RecurringEventName = recurringEventName;
             RecurringEventDescription = recurringEventDescription;

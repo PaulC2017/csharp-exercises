@@ -10,13 +10,12 @@ namespace RemindMe.Models
         public int ID { get; set; }
         public string RecurringReminderName { get; set; }  // this is also the event name
         public string RecurringReminderDescription { get; set; } // this is also the event description
-        public string RecurringEventDate { get; set; }
+        public DateTime RecurringEventDate { get; set; }
         public string RecuringReminderCreateDate { get; set; }
-        public string RecurringReminderStartAlertDate { get;set;}
-        public string RecurringReminderLastAlertDate { get; set; }
+        public DateTime RecurringReminderStartAlertDate { get; set; }
+        public DateTime RecurringReminderLastAlertDate { get; set; }
         public string RecurringReminderFirstAlertTime { get; set; }
         public string RecurringReminderSecondAlertTime { get; set; }
-        public string RecuringReminderAlertFrequency { get; set; }  // how often the alert is sent for an event
         public string RecurringReminderRepeatFrequency { get; set; }  // does the event repeat annually, monthly, etc?
         
         public int UserId { get; set; }
@@ -32,17 +31,20 @@ namespace RemindMe.Models
             RecurringReminderSecondAlertTime = "1500";
         }
         //non default constructor
-        public RecurringReminders(string recurringReminderName, string recurringReminderDescription,string recurringEventDate,string recurringReminderStartAlertDate, 
-                                string recurringReminderLastAlertDate, 
-                                 string recuringReminderAlertFrequency,string recurringReminderRepeatFrequency) : this()
+        public RecurringReminders(string recurringReminderName, 
+                                  string recurringReminderDescription, 
+                                  DateTime recurringEventDate, 
+                                  DateTime recurringReminderStartAlertDate,
+                                  DateTime recurringReminderLastAlertDate, 
+                                  string recurringReminderRepeatFrequency) : this()
         {
             RecurringReminderName = recurringReminderName;
             RecurringReminderDescription = recurringReminderDescription;
-            RecurringReminderStartAlertDate = RemoveChar(recurringReminderStartAlertDate,"/");   
-            RecurringReminderLastAlertDate = RemoveChar(recurringReminderLastAlertDate, "/");    
-            RecuringReminderAlertFrequency = recuringReminderAlertFrequency;
-            RecurringReminderRepeatFrequency = recurringReminderRepeatFrequency;
             RecurringEventDate = recurringEventDate;
+            RecurringReminderStartAlertDate = recurringReminderStartAlertDate;
+            RecurringReminderLastAlertDate = recurringReminderLastAlertDate;
+            RecurringReminderRepeatFrequency = recurringReminderRepeatFrequency;
+            
         }
         public string RemoveChar(string theString, string charsToRemove)
         {

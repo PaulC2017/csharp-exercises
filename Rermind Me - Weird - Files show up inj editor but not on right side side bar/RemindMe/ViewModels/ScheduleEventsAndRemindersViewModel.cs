@@ -23,26 +23,26 @@ namespace RemindMe.ViewModels
         [Display(Name = "Event Description")]
         public string RecurringEventDescription { get; set; }
 
-        // we will use this value for the RecurringReminderDescription in the controller
+        // we will use the above  value for the RecurringReminderDescription in the controller
 
-        [Required(ErrorMessage = "The date of the event is requred")]
+        
         [DataType(DataType.Date)]
         [Display(Name = "Event Date")]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public string RecurringEventDate { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}")]
+        public DateTime RecurringEventDate { get; set; }
+        
         [Required(ErrorMessage = "Enter the date you want to start receiving the text message alerts")]
         [DataType(DataType.Date)]
         [Display(Name = "Start Alert Date")]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public string RecurringReminderStartAlertDate { get; set; }
-
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM-dd-yyyy}")]
+        public DateTime RecurringReminderStartAlertDate { get; set; }
+        
         [Required(ErrorMessage = "Enter the stop date for receiving the text message alerts")]
         [DataType(DataType.Date)]
-        [Display(Name = "Last Alert Date ")]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public string RecurringReminderLastAlertDate { get; set; }
-
+        [Display(Name = "Last Alert Date")]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}")]
+        public DateTime RecurringReminderLastAlertDate { get; set; }
+        
         // we will send a text message once a day on from start date through the last alart date
 
         [Required(ErrorMessage = "Enter the stop date for receiving the text message alerts")]

@@ -11,8 +11,10 @@ namespace RemindMe.Models
         public string NonRecurringReminderName { get; set; }
         public string NonRecurringReminderDescription { get; set; }
         public string NonRecuringReminderCreateDate { get; set; }
-        public string NonRecurringReminderStartAlertDate { get; set; }
-        public string NonRecurringReminderLastAlertDate { get; set; }
+        public DateTime NonRecurringEventDate { get; set; }
+        public string NonRecurringEventTime { get; set; }
+        public DateTime NonRecurringReminderStartAlertDate { get; set; }
+        public DateTime NonRecurringReminderLastAlertDate { get; set; }
         public string NonRecurringReminderFirstAlertTime { get; set; }
         public string NonRecurringReminderSecondAlertTime { get; set; }
         public string NonRecuringReminderAlertFrequency { get; set; }  //how often the alert is sent for an event
@@ -31,14 +33,23 @@ namespace RemindMe.Models
 
         }
         //non default constructor
-        public NonRecurringReminders(string nonRecurringReminderName, string nonRecurringReminderDescription, string nonRecurringReminderStartAlertDate,
-                                string nonRecurringReminderLastAlertDate, string nonRecurringReminderFirstAlertTime,
-                                string nonRecurringReminderSecondAlertTime, string nonRecuringReminderAlertFrequency) : this()
+        
+        public NonRecurringReminders(string nonRecurringReminderName, 
+                                     string nonRecurringReminderDescription, 
+                                     DateTime nonRecurringEventDate,
+                                     string nonRecurringEventTime,
+                                     DateTime nonRecurringReminderStartAlertDate,
+                                     DateTime nonRecurringReminderLastAlertDate, 
+                                     string nonRecurringReminderFirstAlertTime,
+                                     string nonRecurringReminderSecondAlertTime, 
+                                     string nonRecuringReminderAlertFrequency) : this()
         {
             NonRecurringReminderName = nonRecurringReminderName;
             NonRecurringReminderDescription = nonRecurringReminderDescription;
-            NonRecurringReminderStartAlertDate = RemoveChar(nonRecurringReminderStartAlertDate, "/");
-            NonRecurringReminderLastAlertDate = RemoveChar(nonRecurringReminderLastAlertDate, "/");
+            //NonRecurringReminderStartAlertDate = RemoveChar(nonRecurringReminderStartAlertDate, "/");
+            NonRecurringReminderStartAlertDate = nonRecurringReminderStartAlertDate;
+            //NonRecurringReminderLastAlertDate = RemoveChar(nonRecurringReminderLastAlertDate, "/");
+            NonRecurringReminderLastAlertDate = nonRecurringReminderLastAlertDate;
             NonRecurringReminderFirstAlertTime = ConvertTo24HourFormat(nonRecurringReminderFirstAlertTime);
             NonRecurringReminderSecondAlertTime = ConvertTo24HourFormat(nonRecurringReminderSecondAlertTime);
             NonRecuringReminderAlertFrequency = nonRecuringReminderAlertFrequency;
