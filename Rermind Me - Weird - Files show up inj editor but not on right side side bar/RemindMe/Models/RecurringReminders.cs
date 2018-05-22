@@ -17,7 +17,8 @@ namespace RemindMe.Models
         public string RecurringReminderFirstAlertTime { get; set; }
         public string RecurringReminderSecondAlertTime { get; set; }
         public string RecurringReminderRepeatFrequency { get; set; }  // does the event repeat annually, monthly, etc?
-        
+        public string UserCellPhoneNumber { get; set; }
+
         public int UserId { get; set; }
         public User User { get; set; }
 
@@ -36,7 +37,8 @@ namespace RemindMe.Models
                                   DateTime recurringEventDate, 
                                   DateTime recurringReminderStartAlertDate,
                                   DateTime recurringReminderLastAlertDate, 
-                                  string recurringReminderRepeatFrequency) : this()
+                                  string recurringReminderRepeatFrequency,
+                                  string userCellPhoneNumber ) : this()
         {
             RecurringReminderName = recurringReminderName;
             RecurringReminderDescription = recurringReminderDescription;
@@ -44,7 +46,9 @@ namespace RemindMe.Models
             RecurringReminderStartAlertDate = recurringReminderStartAlertDate;
             RecurringReminderLastAlertDate = recurringReminderLastAlertDate;
             RecurringReminderRepeatFrequency = recurringReminderRepeatFrequency;
-            
+            UserCellPhoneNumber = userCellPhoneNumber;
+
+
         }
         public string RemoveChar(string theString, string charsToRemove)
         {

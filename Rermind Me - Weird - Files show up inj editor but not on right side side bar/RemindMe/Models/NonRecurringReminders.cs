@@ -18,7 +18,8 @@ namespace RemindMe.Models
         public string NonRecurringReminderFirstAlertTime { get; set; }
         public string NonRecurringReminderSecondAlertTime { get; set; }
         public string NonRecuringReminderAlertFrequency { get; set; }  //how often the alert is sent for an event
-        
+        public string UserCellPhoneNumber { get; set; }
+
         public int UserId { get; set; }
         public User User { get; set; }
 

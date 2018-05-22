@@ -16,21 +16,23 @@
             <th>Event Name</th>
             <th>Event Description</th>
             <th>Event Date</th>
-            <th>Date to Start alerts</th>
-            <th>Date to stop alerts</th>
+            <th>Date to Start Alerts</th>
+            <th>Date to Stop Alerts</th>
+            <th>Cell Phone to Receive Reminder</th>
             <th>Recurring Frequency</th>
         </tr>
         @foreach (dynamic recurringReminder in @Model)
         {
-            <tr>
-                <td>@recurringReminder.RecurringReminderName</td>
-                <td>@recurringReminder.RecurringReminderDescription</td>
-                <td>@recurringReminder.RecurringEventDate</td>
-                <td>@recurringReminder.RecurringReminderStartAlertDate</td>
-                <td>@recurringReminder.RecurringReminderLastAlertDate</td>
-                <td>@recurringReminder.RecurringReminderRepeatFrequency</td>
+        <tr>
+            <td>@recurringReminder.RecurringReminderName</td>
+            <td>@recurringReminder.RecurringReminderDescription</td>
+            <td>@recurringReminder.RecurringEventDate.ToString("dddd, MMMM dd yyyy")</td>
+            <td>@recurringReminder.RecurringReminderStartAlertDate.ToString("dddd, MMMM dd yyyy")</td>
+            <td>@recurringReminder.RecurringReminderLastAlertDate.ToString("dddd, MMMM dd yyyy")</td>
+            <td>@recurringReminder.UserCellPhoneNumber</td>
+            <td>@recurringReminder.RecurringReminderRepeatFrequency</td>
 
-            </tr>
+        </tr>
 
         }
 

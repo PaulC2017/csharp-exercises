@@ -12,17 +12,19 @@
             <th>Event Name</th>
             <th>Event Description</th>
             <th>Event Date</th>
-            <th>Date to Start alerts</th>
-            <th>Date to stop alerts</th>
+            <th>Date to Start Alerts</th>
+            <th>Date to stop Alerts</th>
+            <th>Cell Phone to Receive Reminder</th>
             <th>Recurring Frequency</th>
         </tr>
 
         <tr>
             <td>@Model.RecurringReminderName</td>
             <td>@Model.RecurringReminderDescription</td>
-            <td>@ViewBag.eventDate</td>
-            <td>@Model.RecurringReminderStartAlertDate</td>
-            <td>@Model.RecurringReminderLastAlertDate</td>
+            <td>@ViewBag.eventDate.ToString("dddd, MMMM dd yyyy")</td>
+            <td>@Model.RecurringReminderStartAlertDate.ToString("dddd, MMMM dd yyyy")</td>
+            <td>@Model.RecurringReminderLastAlertDate.ToString("dddd, MMMM dd yyyy")</td>
+            <td>@Model.UserCellPhoneNumber</td>
             <td>@Model.RecurringReminderRepeatFrequency</td>
 
         </tr>

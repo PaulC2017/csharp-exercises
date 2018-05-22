@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RemindMe.ViewModels;
+using Bandwidth.Net;
+using Bandwidth.Net.Api;
 using RemindMe.Models;
 using RemindMe.Data;
 using Microsoft.EntityFrameworkCore;
@@ -33,8 +35,9 @@ namespace RemindMe.Controllers
 
         public IActionResult Index()
         {
-            // send annual recurringreminders at 10:00 am every day
-            //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTexts("Annually"), "0 0 10 * * ? *");
+            // launch annual recurringreminders at 10:00 am every day
+            //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnuallyAsync(), "0 0 10 * * ? *");
+            BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnuallyAsync());
             return View();
         }
        
@@ -74,6 +77,7 @@ namespace RemindMe.Controllers
                 
                 HttpContext.Session.SetString("Username", newUser.Username);
                 HttpContext.Session.SetInt32("ID", newUser.ID);
+                HttpContext.Session.SetString("CellPhone", newUser.CellPhoneNumber);
                 HttpContext.Session.SetString("CellPhoneNumber", newUser.CellPhoneNumber);
                 return View("UserHomePage", newUser);
                 
@@ -145,16 +149,18 @@ namespace RemindMe.Controllers
                 // create recurring reminder record
                 
                 User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
-                
+                string userCellPhoneNumber = newUser.CellPhoneNumber;
                 RecurringReminders newRecurringReminder = new 
                                  RecurringReminders(newEventAndReminder.RecurringEventName,
                                  newEventAndReminder.RecurringEventDescription,
                                  newEventAndReminder.RecurringEventDate,
                                  newEventAndReminder.RecurringReminderStartAlertDate,
                                  newEventAndReminder.RecurringReminderLastAlertDate,
-                                 newEventAndReminder.RecurringReminderRepeatFrequency);
+                                 newEventAndReminder.RecurringReminderRepeatFrequency,
+                                 newEventAndReminder.UserCellPhoneNumber);
 
                 newRecurringReminder.User= newUser;
+                newRecurringReminder.UserCellPhoneNumber = userCellPhoneNumber;
 
                 context.RecurringReminders.Add(newRecurringReminder);
                 
@@ -230,7 +236,8 @@ namespace RemindMe.Controllers
                                                ch.RecurringReminderLastAlertDate,
                                                ch.RecurringReminderFirstAlertTime,
                                                ch.RecurringReminderSecondAlertTime,
-                                               ch.RecurringReminderRepeatFrequency
+                                               ch.RecurringReminderRepeatFrequency,
+                                               ch.UserCellPhoneNumber
                                               }).AsEnumerable().Select(c => c.ToExpando());
             
             /*
@@ -269,23 +276,72 @@ namespace RemindMe.Controllers
             return View(currentUser);
         }
 
-       
-         public string SendRecurringReminderTexts(string frequency)
+
+        public async Task<string> SendRecurringReminderTextsAnnuallyAsync()
         {
             // create a list of the reminders that are scheduled to go out
             DateTime today = DateTime.Now;
-            //var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == frequency && 
-                                                                 // rr.RecurringReminderStartAlertDate.Date >= today && 
-                                                                  //rr.RecurringReminderLastAlertDate.Date <= today).ToList());
 
-            //retrieve cell phone numbers and link them to the Event/Reminder Name and the EventDate
+            /*
+             * var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
+                                                                   today >= rr.RecurringReminderStartAlertDate.Date &&
+                                                                   today <= rr.RecurringReminderLastAlertDate.Date).ToList());
+            */
 
-            //string[,] textsToSend = new string[rrDueToday.Count, 3];
-            // in the above array - element 0 is cell phone number, element 1 is event/reminder name and element 3 is eventdate
-            
-            return null;
+            await ApiInterface();
+            async Task ApiInterface()
+            {
+                // initialize the sms provider client
+
+                var client = new Client("u-ta243h2cvc3vpchzjfks4zy", "t-tdz5uhrzxd7ojztxehojmrq", "5qhmw3oajgxmhg6vnp6zgxpwgtouytoi6wms3tq");
+
+                //Object creation
+
+                var application = await client.Application.CreateAsync(new CreateApplicationData { Name = "RemindMe" });
+
+                var message = await client.Message.SendAsync(new MessageData
+                {
+                    From = "16312403668",
+                    To = "9084299388",
+                    Text = "Hello World"
+                });
+
+
+
+
+            }
+
+                return null;
         }
-         
+        /*
+        private class UseApiForTextMessages { string userCellPhoneNumber; string recurringReminderName; string recurringRemiderDescription; }
+        {
+            private async Task ApiInterface()
+            {
+                // initialize the sms provider client
+
+                var client = new Client("u-ta243h2cvc3vpchzjfks4zy", "t-tdz5uhrzxd7ojztxehojmrq", "5qhmw3oajgxmhg6vnp6zgxpwgtouytoi6wms3tq");
+
+                //Object creation
+
+                var application = await client.Application.CreateAsync(new CreateApplicationData { Name = "RemindMe" });
+
+            // send SMS
+
+            var message = await client.Message.SendAsync(new MessageData
+                              {
+                                  From = "16312403668",
+                                  To = "9084299388",
+                                  Text = "Hello World"
+                               });
+            }
+              
+
+   
+
+        }
+ */
+
     }
 
 }

@@ -42,7 +42,12 @@ namespace RemindMe.ViewModels
         [Display(Name = "Last Alert Date")]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}")]
         public DateTime RecurringReminderLastAlertDate { get; set; }
-        
+
+        [Required(ErrorMessage = "Enter the cell phone number you where you want the text reminders sent")]
+        [Display(Name = "Cell Phone Number")]
+        public string UserCellPhoneNumber { get; set; }
+
+
         // we will send a text message once a day on from start date through the last alart date
 
         [Required(ErrorMessage = "Enter the stop date for receiving the text message alerts")]
