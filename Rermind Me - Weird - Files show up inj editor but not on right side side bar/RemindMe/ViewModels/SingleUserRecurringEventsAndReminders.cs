@@ -8,6 +8,6 @@ namespace RemindMe.ViewModels
 {
     public class SingleUserRecurringEventsAndReminders
     {
-        public List<RecurringReminders> userRecurringReminders { get; set; }
+        public List<RecurringReminders> UserRecurringReminders { get; set; }
     }
 }

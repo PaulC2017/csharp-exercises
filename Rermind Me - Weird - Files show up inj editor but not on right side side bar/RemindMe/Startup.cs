@@ -10,6 +10,8 @@ using RemindMe.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Hangfire;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace RemindMe
 {
@@ -33,12 +35,31 @@ namespace RemindMe
 
             services.AddDbContext<RemindMeDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
             //Sessions
             services.AddMemoryCache();
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.Name = ".RemindMe";
                                             });
+            //
+
+            // Google Calendar API
+
+            services.AddIdentity<IdentityUser, IdentityRole>();
+            services.AddAuthentication(
+                     v =>
+                     {
+                         v.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                         v.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+
+                     }).AddGoogle(googelOptions =>
+                         {
+                             googelOptions.ClientId = "723770158612-3h09hjsoaei13hm6k3n4dp3dip402r5a.apps.googleusercontent.com";
+                             googelOptions.ClientSecret = "8_lrbaCJxOjUmCrLPCYD5VSJ";
+                         });
+                
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +77,17 @@ namespace RemindMe
 
             app.UseStaticFiles();
 
+            //  google calendar
+
+            app.UseAuthentication().UseMvc();
+
+            //
+
+            // Sessions
             app.UseSession();
+
+            //
+
 
             app.UseMvc(routes =>
             {

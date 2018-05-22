@@ -149,7 +149,7 @@ namespace RemindMe.Controllers
                 // create recurring reminder record
                 
                 User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
-                string userCellPhoneNumber = newUser.CellPhoneNumber;
+               // string userCellPhoneNumber = newUser.CellPhoneNumber;
                 RecurringReminders newRecurringReminder = new 
                                  RecurringReminders(newEventAndReminder.RecurringEventName,
                                  newEventAndReminder.RecurringEventDescription,
@@ -160,7 +160,7 @@ namespace RemindMe.Controllers
                                  newEventAndReminder.UserCellPhoneNumber);
 
                 newRecurringReminder.User= newUser;
-                newRecurringReminder.UserCellPhoneNumber = userCellPhoneNumber;
+                //newRecurringReminder.UserCellPhoneNumber = userCellPhoneNumber;
 
                 context.RecurringReminders.Add(newRecurringReminder);
                 
@@ -305,10 +305,6 @@ namespace RemindMe.Controllers
                     To = "9084299388",
                     Text = "Hello World"
                 });
-
-
-
-
             }
 
                 return null;
