@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Google;
+using RemindMe.Controllers;
 
 namespace RemindMe
 {
@@ -63,7 +64,7 @@ namespace RemindMe
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -79,7 +80,7 @@ namespace RemindMe
 
             //  google calendar
 
-            app.UseAuthentication().UseMvc();
+            //app.UseAuthentication().UseMvc();  removed temporarily while I decide what to do with the Google calendar
 
             //
 
@@ -102,7 +103,17 @@ namespace RemindMe
             GlobalConfiguration.Configuration.UseSqlServerStorage((Configuration.GetConnectionString("DefaultConnection")));
             app.UseHangfireDashboard();
             app.UseHangfireServer();
+
+            //lifetime.ApplicationStarted.Register(OnApplicationStarted); // to start recurring jobs on startup
         }
-        
+
+        /*
+        public void OnApplicationStarted()
+        {
+            Console.WriteLine("We are before the SendReminderTextAnually Statement");
+            RecurringJob.AddOrUpdate("Annual_Reminders", () => RemindMeController.SendRecurringReminderTextsAnnually(), "44 09 * * *");  // every day at 9:44 am
+            Console.WriteLine("We are after the SendReminderTextAnually Statement");
+        }
+        */
     }
 }

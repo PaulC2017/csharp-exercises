@@ -44,6 +44,8 @@ namespace RemindMe.ViewModels
         public DateTime RecurringReminderLastAlertDate { get; set; }
 
         [Required(ErrorMessage = "Enter the cell phone number you where you want the text reminders sent")]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^(\d{10})$", ErrorMessage = "Invalid Phone Number")]
         [Display(Name = "Cell Phone Number")]
         public string UserCellPhoneNumber { get; set; }
 

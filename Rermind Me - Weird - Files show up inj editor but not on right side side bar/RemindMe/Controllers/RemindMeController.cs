@@ -31,21 +31,28 @@ namespace RemindMe.Controllers
         {
             context = dbContext;
         }
-        
+
 
         public IActionResult Index()
         {
             // launch annual recurringreminders at 10:00 am every day
-            //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnuallyAsync(), "0 0 10 * * ? *");
-            BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnuallyAsync());
+
+           Console.WriteLine("We are before the SendReminderTextAnually Statement");
+            //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnually(), "44 10 * * *");  // every day at 10:44 am
+            //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnually()).Daily);
+
+
+            BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
+            Console.WriteLine("We are after the SendReminderTextAnually Statement");
+
             return View();
         }
-       
-        
+
+
         public IActionResult RegisterUser()
         {
             RegisterUserViewModel newUser = new RegisterUserViewModel();
-             
+
 
             return View(newUser);
         }
@@ -53,17 +60,17 @@ namespace RemindMe.Controllers
         [HttpPost]
         public IActionResult RegisterUser(RegisterUserViewModel registerUserViewModel)
         {
-            
+
 
             //check to see if the user name entered already exists
-             
+
 
             //checkUserName = context.User.Single(u => u.Username == registerUserViewModel.Username);
 
             User checkUserName = context.User.FirstOrDefault(u => u.Username == registerUserViewModel.Username);
 
             if (checkUserName != null)
-            { 
+            {
                 ViewBag.userNameExists = "This user name already exists.  Please select another user name";
                 ViewBag.colon = ":";
                 return View(registerUserViewModel);
@@ -74,16 +81,16 @@ namespace RemindMe.Controllers
                 context.User.Add(newUser);
                 context.SaveChanges();
                 ViewBag.User = registerUserViewModel;
-                
+
                 HttpContext.Session.SetString("Username", newUser.Username);
                 HttpContext.Session.SetInt32("ID", newUser.ID);
                 HttpContext.Session.SetString("CellPhone", newUser.CellPhoneNumber);
                 HttpContext.Session.SetString("CellPhoneNumber", newUser.CellPhoneNumber);
                 return View("UserHomePage", newUser);
-                
+
             }
             return View(registerUserViewModel);
-            
+
         }
 
         public IActionResult UserLogin()
@@ -106,7 +113,7 @@ namespace RemindMe.Controllers
                 return View(userLoginViewModel);
             }
             User checkUserLogInInfo = context.User.Single(u => u.Username == userLoginViewModel.Username);
-            
+
 
             if (ModelState.IsValid)
             {
@@ -129,7 +136,7 @@ namespace RemindMe.Controllers
         public IActionResult ScheduleEventsAndReminders()
         {
             ScheduleEventsAndRemindersViewModel scheduleEventsAndReminder = new ScheduleEventsAndRemindersViewModel(context.User.ToList());
-            
+
             if (HttpContext.Session.GetString("Username") == "")
             {
                 return View("Index");
@@ -138,19 +145,19 @@ namespace RemindMe.Controllers
             return View(scheduleEventsAndReminder);
         }
 
-         
+
         [HttpPost]
         public IActionResult ScheduleEventsAndReminders(ScheduleEventsAndRemindersViewModel newEventAndReminder)
 
         {
-            
+
             if (ModelState.IsValid)
             {
                 // create recurring reminder record
-                
+
                 User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
-               // string userCellPhoneNumber = newUser.CellPhoneNumber;
-                RecurringReminders newRecurringReminder = new 
+                // string userCellPhoneNumber = newUser.CellPhoneNumber;
+                RecurringReminders newRecurringReminder = new
                                  RecurringReminders(newEventAndReminder.RecurringEventName,
                                  newEventAndReminder.RecurringEventDescription,
                                  newEventAndReminder.RecurringEventDate,
@@ -159,11 +166,11 @@ namespace RemindMe.Controllers
                                  newEventAndReminder.RecurringReminderRepeatFrequency,
                                  newEventAndReminder.UserCellPhoneNumber);
 
-                newRecurringReminder.User= newUser;
-                //newRecurringReminder.UserCellPhoneNumber = userCellPhoneNumber;
+                newRecurringReminder.User = newUser;
+                
 
                 context.RecurringReminders.Add(newRecurringReminder);
-                
+
                 // save the new event and reminder to the data base
 
                 context.SaveChanges();
@@ -171,47 +178,13 @@ namespace RemindMe.Controllers
                 return View("RecurringEventsAndReminders", newRecurringReminder);
 
             }
-                
-                //ViewBag.User = registerUserViewModel;
-                return View(newEventAndReminder);
-        }
-        
-        /*
-        public IActionResult Test()
-        {
-           if ( HttpContext.Session.GetString("Username")  == "")
-              {
-                return View("Index");
-              }
 
-           
-
-
-
-            // retrieve only those records for the current user - a better way to do this 
-            //than the above commented out code 
-
-            //IList<RecurringReminders> userRecurringReminders = context.RecurringReminders.Include(u => u.User).ToList().Where(User == HttpContext.Session.GetString("Username") ) ;
-            //IList<RecurringReminders> userRecurringReminders = context.RecurringReminders.Include(u => u.User).ToList();
-            //IList<RecurringReminders> userRecurringReminders = context.RecurringReminders.Include(u => u.User).ToList();
-            var userRecurringReminders = (from recurringReminder in context.RecurringReminders
-                                         where (recurringReminder.UserId == HttpContext.Session.GetInt32("ID"))
-                                         select new
-                                         {
-                                             recurringReminder.RecurringReminderName,
-                                             recurringReminder.RecurringReminderDescription,
-                                             recurringReminder.RecurringEventDate,
-                                             recurringReminder.RecurringReminderStartAlertDate,
-                                             recurringReminder.RecurringReminderLastAlertDate,
-                                             recurringReminder.RecurringReminderRepeatFrequency
-                                         }).ToList();
             
-            return View(userRecurringReminders);
+            return View(newEventAndReminder);
         }
-        
-        */
-       public ActionResult SingleUserRecurringEventsAndReminders()
-       {
+
+        public ActionResult SingleUserRecurringEventsAndReminders()
+        {
 
             if (HttpContext.Session.GetString("Username") == "")
             {
@@ -219,8 +192,8 @@ namespace RemindMe.Controllers
             }
 
             ViewBag.Username = HttpContext.Session.GetString("Username");
-            
-            
+
+
             dynamic userRecurringReminders = (from ch in context.RecurringReminders
                                               join
                                               ca in context.User
@@ -228,18 +201,18 @@ namespace RemindMe.Controllers
                                               where ca.ID == HttpContext.Session.GetInt32("ID")
                                               select new
                                               {
-                                               ch.RecurringReminderName,
-                                               ch.RecurringReminderDescription,
-                                               ch.RecurringEventDate,
-                                               ch.RecuringReminderCreateDate,
-                                               ch.RecurringReminderStartAlertDate,
-                                               ch.RecurringReminderLastAlertDate,
-                                               ch.RecurringReminderFirstAlertTime,
-                                               ch.RecurringReminderSecondAlertTime,
-                                               ch.RecurringReminderRepeatFrequency,
-                                               ch.UserCellPhoneNumber
+                                                  ch.RecurringReminderName,
+                                                  ch.RecurringReminderDescription,
+                                                  ch.RecurringEventDate,
+                                                  ch.RecuringReminderCreateDate,
+                                                  ch.RecurringReminderStartAlertDate,
+                                                  ch.RecurringReminderLastAlertDate,
+                                                  ch.RecurringReminderFirstAlertTime,
+                                                  ch.RecurringReminderSecondAlertTime,
+                                                  ch.RecurringReminderRepeatFrequency,
+                                                  ch.UserCellPhoneNumber
                                               }).AsEnumerable().Select(c => c.ToExpando());
-            
+
             /*
             var userRecurringReminders = (from recurringReminder in context.RecurringReminders
                                           where (recurringReminder.UserId == HttpContext.Session.GetInt32("ID"))
@@ -255,9 +228,9 @@ namespace RemindMe.Controllers
              */
 
             return View(userRecurringReminders);
-             
+
         }
-        
+
         public IActionResult UserLogout()
         {
             HttpContext.Session.SetString("Username", "");
@@ -277,67 +250,62 @@ namespace RemindMe.Controllers
         }
 
 
-        public async Task<string> SendRecurringReminderTextsAnnuallyAsync()
+        public  IActionResult SendRecurringReminderTextsAnnually()
         {
-            // create a list of the reminders that are scheduled to go out
-            DateTime today = DateTime.Now;
+            // create a list of the reminders that are scheduled to go out today
+            DateTime today = DateTime.Now.Date;
+            Console.WriteLine("today = " + today);
+            Console.WriteLine("We are before the var statement");
+            var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
+                                                                  today >= rr.RecurringReminderStartAlertDate.Date &&
+                                                                  today <= rr.RecurringReminderLastAlertDate.Date).ToList());
+            Console.WriteLine("We are after the var statement");
+            Console.WriteLine("Count of items in var rrDueToday: " + rrDueToday.Count());
+            //
 
-            /*
-             * var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
-                                                                   today >= rr.RecurringReminderStartAlertDate.Date &&
-                                                                   today <= rr.RecurringReminderLastAlertDate.Date).ToList());
-            */
-
-            await ApiInterface();
-            async Task ApiInterface()
+            // send reminders 
+            foreach (var rr in rrDueToday)
             {
-                // initialize the sms provider client
-
-                var client = new Client("u-ta243h2cvc3vpchzjfks4zy", "t-tdz5uhrzxd7ojztxehojmrq", "5qhmw3oajgxmhg6vnp6zgxpwgtouytoi6wms3tq");
-
-                //Object creation
-
-                var application = await client.Application.CreateAsync(new CreateApplicationData { Name = "RemindMe" });
-
-                var message = await client.Message.SendAsync(new MessageData
+                try
                 {
-                    From = "16312403668",
-                    To = "9084299388",
-                    Text = "Hello World"
-                });
+                    Console.WriteLine("We are before the TRY command");
+                   
+                    SendMessage(rr.UserCellPhoneNumber, "16312403668", rr.RecurringReminderName).Wait();
+                    Console.WriteLine("We are after the TRY command");
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                }
+
             }
 
-                return null;
+            //
+
+            return null;
         }
-        /*
-        private class UseApiForTextMessages { string userCellPhoneNumber; string recurringReminderName; string recurringRemiderDescription; }
+
+        private const string UserId = "u-ta243h2cvc3vpchzjfks4zy";  //{user_id}
+        private const string Token = "t-tdz5uhrzxd7ojztxehojmrq"; //{token}
+        private const string Secret = "5qhmw3oajgxmhg6vnp6zgxpwgtouytoi6wms3tq"; //{secret}
+        private static async Task SendMessage(string to, string from, string text)
+
         {
-            private async Task ApiInterface()
+            var data = new Bandwidth.Net.Api.MessageData
             {
-                // initialize the sms provider client
+                To = to, // number receiving text essage
+                From = from, //bandwidth number
+                Text = text  // reminder
+            };
+            var client = new Client(UserId, Token, Secret);
 
-                var client = new Client("u-ta243h2cvc3vpchzjfks4zy", "t-tdz5uhrzxd7ojztxehojmrq", "5qhmw3oajgxmhg6vnp6zgxpwgtouytoi6wms3tq");
 
-                //Object creation
+            var message = await client.Message.SendAsync(data);
 
-                var application = await client.Application.CreateAsync(new CreateApplicationData { Name = "RemindMe" });
-
-            // send SMS
-
-            var message = await client.Message.SendAsync(new MessageData
-                              {
-                                  From = "16312403668",
-                                  To = "9084299388",
-                                  Text = "Hello World"
-                               });
-            }
-              
-
-   
 
         }
- */
-
+        
     }
 
 }
