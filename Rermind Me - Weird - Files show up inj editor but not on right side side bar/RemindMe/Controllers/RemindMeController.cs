@@ -296,7 +296,7 @@ namespace RemindMe.Controllers
                     Console.WriteLine("Text Token = " + TextToken);
                     Console.WriteLine("Text Secret = " + TextSecret);
                     Console.WriteLine("Text From = " + TextFrom);
-                    SendMessage(rr.UserCellPhoneNumber, TextFrom, rr.RecurringReminderName, TextId, TextToken, TextFrom).Wait();
+                    SendMessage(rr.UserCellPhoneNumber, TextFrom, rr.RecurringReminderName, TextId, TextToken, TextSecret).Wait();
                     Console.WriteLine("We are after the TRY command");
                     
                 }
