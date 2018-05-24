@@ -37,11 +37,15 @@ namespace RemindMe.Controllers
         {
             // launch annual recurringreminders at 10:00 am every day
 
-           Console.WriteLine("We are before the SendReminderTextAnually Statement");
+
             //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnually(), "44 10 * * *");  // every day at 10:44 am
             //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnually()).Daily);
 
 
+
+
+            //
+            Console.WriteLine("We are before the SendReminderTextAnually Statement");
             BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
             Console.WriteLine("We are after the SendReminderTextAnually Statement");
 
@@ -263,14 +267,36 @@ namespace RemindMe.Controllers
             Console.WriteLine("Count of items in var rrDueToday: " + rrDueToday.Count());
             //
 
+            //Get TextInfo and populate text parameters//  
+             string  TextId = "";
+            string TextToken = "";
+            string TextSecret = "";
+            string TextFrom = "";
+            
+            var textInfo  = (context.TextInfo.Where(id => id.ID > 0).ToList()); // there is only 1 record in this table
+            foreach (var ti in textInfo)
+            {
+                TextId = ti.TextUserId;
+                TextToken = ti.TextToken;
+                TextSecret = ti.TextSecret;
+                TextFrom = ti.TextFrom;
+            }
+            Console.WriteLine("Text ID = " + TextId);
+            Console.WriteLine("Text Token = " + TextToken);
+            Console.WriteLine("Text Secret = " + TextSecret);
+            Console.WriteLine("Text From = " + TextFrom);
+            //
             // send reminders 
             foreach (var rr in rrDueToday)
             {
                 try
                 {
                     Console.WriteLine("We are before the TRY command");
-                   
-                    SendMessage(rr.UserCellPhoneNumber, "16312403668", rr.RecurringReminderName).Wait();
+                    Console.WriteLine("Text ID = " + TextId);
+                    Console.WriteLine("Text Token = " + TextToken);
+                    Console.WriteLine("Text Secret = " + TextSecret);
+                    Console.WriteLine("Text From = " + TextFrom);
+                    SendMessage(rr.UserCellPhoneNumber, TextFrom, rr.RecurringReminderName, TextId, TextToken, TextFrom).Wait();
                     Console.WriteLine("We are after the TRY command");
                     
                 }
@@ -286,10 +312,14 @@ namespace RemindMe.Controllers
             return null;
         }
 
-        private const string UserId = "u-ta243h2cvc3vpchzjfks4zy";  //{user_id}
-        private const string Token = "t-tdz5uhrzxd7ojztxehojmrq"; //{token}
-        private const string Secret = "5qhmw3oajgxmhg6vnp6zgxpwgtouytoi6wms3tq"; //{secret}
-        private static async Task SendMessage(string to, string from, string text)
+        //retrieve text info
+
+
+
+        //
+
+        
+        private static async Task SendMessage(string to, string from, string text,string textId, string textToken,string textSecret)
 
         {
             var data = new Bandwidth.Net.Api.MessageData
@@ -298,7 +328,15 @@ namespace RemindMe.Controllers
                 From = from, //bandwidth number
                 Text = text  // reminder
             };
-            var client = new Client(UserId, Token, Secret);
+
+            Console.WriteLine("Text ID = " + textId);
+            Console.WriteLine("Text Token = " + textToken);
+            Console.WriteLine("Text Secret = " + textSecret);
+            Console.WriteLine("Text From = " + from);
+
+
+
+            var client = new Client(textId, textToken, textSecret);
 
 
             var message = await client.Message.SendAsync(data);
