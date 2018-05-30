@@ -25,9 +25,9 @@ namespace RemindMe.Controllers
 {
     public class RemindMeController : Controller
     {
-        private readonly RemindMeDbContext context;
-
-        public RemindMeController(RemindMeDbContext dbContext)
+        private  readonly RemindMeDbContext context;
+        
+        public  RemindMeController(RemindMeDbContext dbContext)
         {
             context = dbContext;
         }
@@ -253,8 +253,21 @@ namespace RemindMe.Controllers
             return View(currentUser);
         }
 
+        // Method called from Startup.cs that launches Hangfire background tasks
+
+        public IActionResult LaunchBackGroundJobs(Object j)
+        {
+            //SendReminderTextsController texts = new SendReminderTextsController();
+
+            //BackgroundJob.Enqueue(() => texts.SendAnnualTexts());
+
+            BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
+            
+            return null;
+        }
 
         public  IActionResult SendRecurringReminderTextsAnnually()
+       
         {
             // create a list of the reminders that are scheduled to go out today
             DateTime today = DateTime.Now.Date;
@@ -296,7 +309,11 @@ namespace RemindMe.Controllers
                     Console.WriteLine("Text Token = " + TextToken);
                     Console.WriteLine("Text Secret = " + TextSecret);
                     Console.WriteLine("Text From = " + TextFrom);
-                    SendMessage(rr.UserCellPhoneNumber, TextFrom, rr.RecurringReminderName, TextId, TextToken, TextSecret).Wait();
+
+                    string eventDate = rr.RecurringEventDate.ToString("MM/dd");
+                    string textMessage = rr.RecurringReminderName + "\r\n" + eventDate;
+
+                    SendMessage(rr.UserCellPhoneNumber, TextFrom, textMessage, TextId, TextToken, TextSecret).Wait();
                     Console.WriteLine("We are after the TRY command");
                     
                 }
@@ -335,12 +352,13 @@ namespace RemindMe.Controllers
             Console.WriteLine("Text From = " + from);
 
 
-
+            Console.WriteLine("We are before the var client command");
             var client = new Client(textId, textToken, textSecret);
+            Console.WriteLine("We are after the var client command");
 
-
+            Console.WriteLine("We are before the var message command");
             var message = await client.Message.SendAsync(data);
-
+            Console.WriteLine("We are after the var message command");
 
         }
         

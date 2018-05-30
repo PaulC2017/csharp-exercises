@@ -13,6 +13,12 @@ using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Google;
 using RemindMe.Controllers;
+using Hangfire.Common;
+using RemindMe.Models;
+using Hangfire.Annotations;
+
+using Microsoft.AspNetCore.Owin;
+//[assembly: OwinStartupAttribute(typeof(HangFire.Startup))]
 
 namespace RemindMe
 {
@@ -32,11 +38,17 @@ namespace RemindMe
             services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
             //
 
+            
             services.AddMvc();
+
+            // Access to database 
 
             services.AddDbContext<RemindMeDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             
+
+
             //Sessions
             services.AddMemoryCache();
             services.AddSession(options => {
@@ -64,7 +76,9 @@ namespace RemindMe
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+                              ILoggerFactory loggerFactory, IApplicationLifetime lifetime,
+                              IRecurringJobManager recurringJobs)
         {
             if (env.IsDevelopment())
             {
@@ -97,23 +111,28 @@ namespace RemindMe
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-           
+
 
             //added for Hangfire
+          
             GlobalConfiguration.Configuration.UseSqlServerStorage((Configuration.GetConnectionString("DefaultConnection")));
             app.UseHangfireDashboard();
             app.UseHangfireServer();
 
-            //lifetime.ApplicationStarted.Register(OnApplicationStarted); // to start recurring jobs on startup
+            //start and configure recurring Hangfire jobs on startup
+
+            app.UseMvc();
+            recurringJobs.AddOrUpdate("Annual_Reminders", Job.FromExpression<RemindMeController>(x => x.LaunchBackGroundJobs(null)), Cron.Daily(15, 01)); //UTC time of 4 hours ahead of Eastern Time
+            //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnually(), "44 10 * * *");  // every day at 10:44 am
+
+
+            // this one works!!
+            //
+            // recurringJobs.AddOrUpdate("Annual_Reminders", Job.FromExpression<RemindMeController>(x => x.LaunchBackGroundJobs(null)), Cron.Minutely());
+            //
+
         }
 
-        /*
-        public void OnApplicationStarted()
-        {
-            Console.WriteLine("We are before the SendReminderTextAnually Statement");
-            RecurringJob.AddOrUpdate("Annual_Reminders", () => RemindMeController.SendRecurringReminderTextsAnnually(), "44 09 * * *");  // every day at 9:44 am
-            Console.WriteLine("We are after the SendReminderTextAnually Statement");
-        }
-        */
+
     }
 }
