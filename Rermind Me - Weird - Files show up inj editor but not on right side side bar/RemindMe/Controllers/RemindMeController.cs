@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,9 +26,9 @@ namespace RemindMe.Controllers
 {
     public class RemindMeController : Controller
     {
-        private  readonly RemindMeDbContext context;
-        
-        public  RemindMeController(RemindMeDbContext dbContext)
+        private readonly RemindMeDbContext context;
+
+        public RemindMeController(RemindMeDbContext dbContext)
         {
             context = dbContext;
         }
@@ -162,16 +163,16 @@ namespace RemindMe.Controllers
                 User newUser = context.User.Single(u => u.Username == HttpContext.Session.GetString("Username"));
                 // string userCellPhoneNumber = newUser.CellPhoneNumber;
                 RecurringReminders newRecurringReminder = new
-                                 RecurringReminders(newEventAndReminder.RecurringEventName,
-                                 newEventAndReminder.RecurringEventDescription,
-                                 newEventAndReminder.RecurringEventDate.Date,
-                                 newEventAndReminder.RecurringReminderStartAlertDate.Date,
-                                 newEventAndReminder.RecurringReminderLastAlertDate.Date,
-                                 newEventAndReminder.RecurringReminderRepeatFrequency,
-                                 newEventAndReminder.UserCellPhoneNumber);
+                    RecurringReminders(newEventAndReminder.RecurringEventName,
+                                       newEventAndReminder.RecurringEventDescription,
+                                       newEventAndReminder.RecurringEventDate.Date,
+                                       newEventAndReminder.RecurringReminderStartAlertDate.Date,
+                                       newEventAndReminder.RecurringReminderLastAlertDate.Date,
+                                       newEventAndReminder.RecurringReminderRepeatFrequency,
+                                       newEventAndReminder.UserCellPhoneNumber);
 
                 newRecurringReminder.User = newUser;
-                
+
 
                 context.RecurringReminders.Add(newRecurringReminder);
 
@@ -183,7 +184,7 @@ namespace RemindMe.Controllers
 
             }
 
-            
+
             return View(newEventAndReminder);
         }
 
@@ -222,14 +223,14 @@ namespace RemindMe.Controllers
                                           where (recurringReminder.UserId == HttpContext.Session.GetInt32("ID"))
                                           select new
                                           {
-                                              recurringReminder.RecurringReminderName,
-                                              recurringReminder.RecurringReminderDescription,
-                                              recurringReminder.RecurringEventDate,
-                                              recurringReminder.RecurringReminderStartAlertDate,
-                                              recurringReminder.RecurringReminderLastAlertDate,
-                                              recurringReminder.RecurringReminderRepeatFrequency
+                                          recurringReminder.RecurringReminderName,
+                                          recurringReminder.RecurringReminderDescription,
+                                          recurringReminder.RecurringEventDate,
+                                          recurringReminder.RecurringReminderStartAlertDate,
+                                          recurringReminder.RecurringReminderLastAlertDate,
+                                          recurringReminder.RecurringReminderRepeatFrequency
                                           }).ToList();
-             */
+                */
 
             return View(userRecurringReminders);
 
@@ -257,36 +258,36 @@ namespace RemindMe.Controllers
 
         public IActionResult LaunchBackGroundJobs(Object j)
         {
-           
+
             BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
-            
+
             return null;
         }
 
-        public  IActionResult SendRecurringReminderTextsAnnually()
-       
+        public IActionResult SendRecurringReminderTextsAnnually()
+
         {
             // create a list of the reminders that are scheduled to go out today
             DateTime today = DateTime.Now.Date;
             Console.WriteLine("today = " + today);
             Console.WriteLine("We are before the var statement");
             var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
-                                                                  today >= rr.RecurringReminderStartAlertDate.Date &&
-                                                                  today <= rr.RecurringReminderLastAlertDate.Date &&
-                                                                  DateTime.Now.Date > rr.RecurringReminderDateAndTimeLastAlertSent.Date).ToList());
+                                                               today >= rr.RecurringReminderStartAlertDate.Date &&
+                                                               today <= rr.RecurringReminderLastAlertDate.Date &&
+                                                               DateTime.Now.Date > rr.RecurringReminderDateAndTimeLastAlertSent.Date).ToList());
 
-            
+
             Console.WriteLine("We are after the var statement");
             Console.WriteLine("Count of items in var rrDueToday: " + rrDueToday.Count());
             //
 
-            //Get TextInfo and populate text parameters//  
-            string  TextId = "";
+            //Get TextInfo and populate text parameters//
+            string TextId = "";
             string TextToken = "";
             string TextSecret = "";
             string TextFrom = "";
-            
-            var textInfo  = (context.TextInfo.Where(id => id.ID > 0).ToList()); // there is only 1 record in this table
+
+            var textInfo = (context.TextInfo.Where(id => id.ID > 0).ToList()); // there is only 1 record in this table
 
             foreach (var ti in textInfo)
             {
@@ -300,7 +301,7 @@ namespace RemindMe.Controllers
             Console.WriteLine("Text Secret = " + TextSecret);
             Console.WriteLine("Text From = " + TextFrom);
             //
-            // send reminders 
+            // send reminders
             foreach (var rr in rrDueToday)
             {
                 try
@@ -313,8 +314,10 @@ namespace RemindMe.Controllers
                     Console.WriteLine("RecurringReminderDateAndTimeLastAlertSent.Date = " + rr.RecurringReminderDateAndTimeLastAlertSent.Date);
                     Console.WriteLine("DateTime.Now.Date = " + DateTime.Now.Date);
                     Console.WriteLine("Comparison of above two variables = " + (DateTime.Now > rr.RecurringReminderDateAndTimeLastAlertSent));
-                    string eventDate = rr.RecurringEventDate.ToString("MM/dd");
-                    string textMessage = rr.RecurringReminderName + "\r\n" + eventDate;
+
+                    // format text message
+                    string eventDate = rr.RecurringEventDate.ToString("MM/dd"); // Just include the month and day of the event in the text message
+                    string textMessage = "From: Remind Me - Don't Forget!!\r\n" + "Event: " + rr.RecurringReminderName + "\r\n" + "Description: " + rr.RecurringReminderDescription + "\r\nDate " + eventDate;
 
                     SendMessage(rr.UserCellPhoneNumber, TextFrom, textMessage, TextId, TextToken, TextSecret).Wait();
                     Console.WriteLine("We are after the TRY command");
@@ -343,8 +346,8 @@ namespace RemindMe.Controllers
 
         //
 
-        
-        private static async Task SendMessage(string to, string from, string text,string textId, string textToken,string textSecret)
+
+        private static async Task SendMessage(string to, string from, string text, string textId, string textToken, string textSecret)
 
         {
             var data = new Bandwidth.Net.Api.MessageData
@@ -369,7 +372,7 @@ namespace RemindMe.Controllers
             Console.WriteLine("We are after the var message command");
 
         }
-        
+
     }
 
 }
