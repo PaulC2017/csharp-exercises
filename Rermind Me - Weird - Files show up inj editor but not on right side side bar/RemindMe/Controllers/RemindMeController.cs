@@ -164,9 +164,9 @@ namespace RemindMe.Controllers
                 RecurringReminders newRecurringReminder = new
                                  RecurringReminders(newEventAndReminder.RecurringEventName,
                                  newEventAndReminder.RecurringEventDescription,
-                                 newEventAndReminder.RecurringEventDate,
-                                 newEventAndReminder.RecurringReminderStartAlertDate,
-                                 newEventAndReminder.RecurringReminderLastAlertDate,
+                                 newEventAndReminder.RecurringEventDate.Date,
+                                 newEventAndReminder.RecurringReminderStartAlertDate.Date,
+                                 newEventAndReminder.RecurringReminderLastAlertDate.Date,
                                  newEventAndReminder.RecurringReminderRepeatFrequency,
                                  newEventAndReminder.UserCellPhoneNumber);
 
@@ -178,7 +178,7 @@ namespace RemindMe.Controllers
                 // save the new event and reminder to the data base
 
                 context.SaveChanges();
-                ViewBag.eventDate = newEventAndReminder.RecurringEventDate;
+                ViewBag.eventDate = newEventAndReminder.RecurringEventDate.Date;
                 return View("RecurringEventsAndReminders", newRecurringReminder);
 
             }
@@ -257,10 +257,7 @@ namespace RemindMe.Controllers
 
         public IActionResult LaunchBackGroundJobs(Object j)
         {
-            //SendReminderTextsController texts = new SendReminderTextsController();
-
-            //BackgroundJob.Enqueue(() => texts.SendAnnualTexts());
-
+           
             BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
             
             return null;
@@ -275,18 +272,22 @@ namespace RemindMe.Controllers
             Console.WriteLine("We are before the var statement");
             var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
                                                                   today >= rr.RecurringReminderStartAlertDate.Date &&
-                                                                  today <= rr.RecurringReminderLastAlertDate.Date).ToList());
+                                                                  today <= rr.RecurringReminderLastAlertDate.Date &&
+                                                                  DateTime.Now.Date > rr.RecurringReminderDateAndTimeLastAlertSent.Date).ToList());
+
+            
             Console.WriteLine("We are after the var statement");
             Console.WriteLine("Count of items in var rrDueToday: " + rrDueToday.Count());
             //
 
             //Get TextInfo and populate text parameters//  
-             string  TextId = "";
+            string  TextId = "";
             string TextToken = "";
             string TextSecret = "";
             string TextFrom = "";
             
             var textInfo  = (context.TextInfo.Where(id => id.ID > 0).ToList()); // there is only 1 record in this table
+
             foreach (var ti in textInfo)
             {
                 TextId = ti.TextUserId;
@@ -309,13 +310,20 @@ namespace RemindMe.Controllers
                     Console.WriteLine("Text Token = " + TextToken);
                     Console.WriteLine("Text Secret = " + TextSecret);
                     Console.WriteLine("Text From = " + TextFrom);
-
+                    Console.WriteLine("RecurringReminderDateAndTimeLastAlertSent.Date = " + rr.RecurringReminderDateAndTimeLastAlertSent.Date);
+                    Console.WriteLine("DateTime.Now.Date = " + DateTime.Now.Date);
+                    Console.WriteLine("Comparison of above two variables = " + (DateTime.Now > rr.RecurringReminderDateAndTimeLastAlertSent));
                     string eventDate = rr.RecurringEventDate.ToString("MM/dd");
                     string textMessage = rr.RecurringReminderName + "\r\n" + eventDate;
 
                     SendMessage(rr.UserCellPhoneNumber, TextFrom, textMessage, TextId, TextToken, TextSecret).Wait();
                     Console.WriteLine("We are after the TRY command");
-                    
+
+                    // Update the current record to reflect the date the latest alert was sent
+
+                    rr.RecurringReminderDateAndTimeLastAlertSent = DateTime.Now;
+                    context.SaveChanges();
+
                 }
                 catch (Exception ex)
                 {
