@@ -19,6 +19,7 @@ namespace RemindMe.Models
         public string NonRecurringReminderSecondAlertTime { get; set; }
         public string NonRecuringReminderAlertFrequency { get; set; }  //how often the alert is sent for an event
         public string UserCellPhoneNumber { get; set; }
+        public DateTime? NonRecurringReminderDateAndTimeLastAlertSent { get; set; }  //initial value to be set to null hence the ?
 
         public int UserId { get; set; }
         public User User { get; set; }
@@ -31,6 +32,7 @@ namespace RemindMe.Models
            // NonRecurringReminderId = nextNonRecurringReminderId;
            // nextNonRecurringReminderId++;
             NonRecuringReminderCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
+            NonRecurringReminderDateAndTimeLastAlertSent = null;
 
         }
         //non default constructor

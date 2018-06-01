@@ -11,9 +11,10 @@ using System;
 namespace RemindMe.Migrations
 {
     [DbContext(typeof(RemindMeDbContext))]
-    partial class RemindMeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180601172612_added DateAndTimeLAstAlertSent to reminder tables")]
+    partial class addedDateAndTimeLAstAlertSenttoremindertables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
