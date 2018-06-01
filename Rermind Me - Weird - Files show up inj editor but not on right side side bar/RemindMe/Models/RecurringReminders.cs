@@ -32,7 +32,7 @@ namespace RemindMe.Models
             RecuringReminderCreateDate = DateTime.Today.ToString("MM/dd/yyyy");
             RecurringReminderFirstAlertTime = "0900";
             RecurringReminderSecondAlertTime = "1500";
-            RecurringReminderDateAndTimeLastAlertSent = new DateTime(2002,08,10); //set a date in the past
+            RecurringReminderDateAndTimeLastAlertSent = new DateTime(2001,01,01); //set a date that will always be less than the current date
         }
         //non default constructor
         public RecurringReminders(string recurringReminderName, 

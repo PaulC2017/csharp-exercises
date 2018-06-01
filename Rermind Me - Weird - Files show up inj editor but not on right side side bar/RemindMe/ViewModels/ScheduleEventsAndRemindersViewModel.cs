@@ -34,7 +34,8 @@ namespace RemindMe.ViewModels
         [Required(ErrorMessage = "Enter the date you want to start receiving the text message alerts")]
         [DataType(DataType.Date)]
         [Display(Name = "Start Alert Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM-dd-yyyy}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM-dd-yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM-dd}")]
         public DateTime RecurringReminderStartAlertDate { get; set; }
         
         [Required(ErrorMessage = "Enter the stop date for receiving the text message alerts")]

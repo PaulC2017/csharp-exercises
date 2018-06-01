@@ -268,14 +268,22 @@ namespace RemindMe.Controllers
 
         {
             // create a list of the reminders that are scheduled to go out today
-            DateTime today = DateTime.Now.Date;
+            //DateTime today = DateTime.Now.Date;
+            string today = DateTime.Now.Date.ToString("MM/dd"); // convert today's date to string for comparison to dates in recurringreminders
             Console.WriteLine("today = " + today);
             Console.WriteLine("We are before the var statement");
+
+            /*  this one works
             var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
                                                                today >= rr.RecurringReminderStartAlertDate.Date &&
                                                                today <= rr.RecurringReminderLastAlertDate.Date &&
                                                                DateTime.Now.Date > rr.RecurringReminderDateAndTimeLastAlertSent.Date).ToList());
 
+            */
+            var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
+                                                               today.CompareTo(rr.RecurringReminderStartAlertDate.Date.ToString("MM/dd")) >= 0 &&
+                                                               today.CompareTo(rr.RecurringReminderLastAlertDate.Date.ToString("MM/dd")) <= 0 &&
+                                                               (DateTime.Now.Date.ToString("MM/dd").CompareTo(rr.RecurringReminderDateAndTimeLastAlertSent.Date.ToString("MM/dd")) > 0)).ToList());
 
             Console.WriteLine("We are after the var statement");
             Console.WriteLine("Count of items in var rrDueToday: " + rrDueToday.Count());
