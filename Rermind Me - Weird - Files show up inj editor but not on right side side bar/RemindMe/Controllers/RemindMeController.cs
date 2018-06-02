@@ -1,4 +1,5 @@
 ﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,13 +43,9 @@ namespace RemindMe.Controllers
             //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnually(), "44 10 * * *");  // every day at 10:44 am
             //RecurringJob.AddOrUpdate("Annual_Reminders", () => SendRecurringReminderTextsAnnually()).Daily);
 
-
-
-
-            //
-            Console.WriteLine("We are before the SendReminderTextAnually Statement");
-            BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
-            Console.WriteLine("We are after the SendReminderTextAnually Statement");
+            //Console.WriteLine("We are before the SendReminderTextAnually Statement");
+            // BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
+            // Console.WriteLine("We are after the SendReminderTextAnually Statement");
 
             return View();
         }
@@ -256,10 +253,18 @@ namespace RemindMe.Controllers
 
         // Method called from Startup.cs that launches Hangfire background tasks
 
-        public IActionResult LaunchBackGroundJobs(Object j)
+        public IActionResult LaunchSendRecurringReminderTextsAnnually(Object j)
         {
 
             BackgroundJob.Enqueue(() => SendRecurringReminderTextsAnnually());
+
+            return null;
+        }
+
+        public IActionResult LaunchResetRecurringReminderDateAndTimeLastAlertSent(Object j)
+        {
+
+            BackgroundJob.Enqueue(() => ResetRecurringReminderDateAndTimeLastAlertSent());
 
             return null;
         }
@@ -278,12 +283,17 @@ namespace RemindMe.Controllers
                                                                today >= rr.RecurringReminderStartAlertDate.Date &&
                                                                today <= rr.RecurringReminderLastAlertDate.Date &&
                                                                DateTime.Now.Date > rr.RecurringReminderDateAndTimeLastAlertSent.Date).ToList());
-
-            */
             var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
                                                                today.CompareTo(rr.RecurringReminderStartAlertDate.Date.ToString("MM/dd")) >= 0 &&
                                                                today.CompareTo(rr.RecurringReminderLastAlertDate.Date.ToString("MM/dd")) <= 0 &&
                                                                (DateTime.Now.Date.ToString("MM/dd").CompareTo(rr.RecurringReminderDateAndTimeLastAlertSent.Date.ToString("MM/dd")) > 0)).ToList());
+            */
+
+            var rrDueToday = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually" &&
+                                                               today.CompareTo(rr.RecurringReminderStartAlertDate.Date.ToString("MM/dd")) >= 0 &&
+                                                               today.CompareTo(rr.RecurringReminderLastAlertDate.Date.ToString("MM/dd")) <= 0 &&
+                                                               (DateTime.Now.Date.ToString("MM/dd").CompareTo(rr.RecurringReminderDateAndTimeLastAlertSent.Date.ToString("MM/dd")) > 0 || rr.RecurringReminderDateAndTimeLastAlertSent.Date.ToString("yyyy").CompareTo("2001") == 0)).ToList());
+
 
             Console.WriteLine("We are after the var statement");
             Console.WriteLine("Count of items in var rrDueToday: " + rrDueToday.Count());
@@ -380,6 +390,24 @@ namespace RemindMe.Controllers
             Console.WriteLine("We are after the var message command");
 
         }
+        public IActionResult ResetRecurringReminderDateAndTimeLastAlertSent()
+        {
+
+            Console.WriteLine("Starting to retrieve the records");
+            var annualRecurringReminders = (context.RecurringReminders.Where(rr => rr.RecurringReminderRepeatFrequency == "Annually").ToList());
+            Console.WriteLine("Finished retrieving the records");
+            Console.WriteLine("Number of records found: " + annualRecurringReminders.Count());
+            foreach (var rr in annualRecurringReminders)
+            {
+                rr.RecurringReminderDateAndTimeLastAlertSent = Convert.ToDateTime("01/01/2001");
+            }
+            context.SaveChanges();
+
+            return null;
+        }
+
+
+
 
     }
 
